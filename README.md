@@ -111,9 +111,12 @@ notifications - > collection of BlazorNotifierMessage
 
 From Client you mast send ConnectionId to controller
 ```C#
-        var result = await client.GetAsync($"NotificationTest/GetSomeData/{NotifiService.UserId}");
+@inject BlazorNotifierClientService NotifiService
+
+var result = await client.GetAsync($"NotificationTest/GetSomeData/{NotifiService.UserId}");
 ```
 and in conroller just call to api service
+
 add to constructor BlazorNotifierServerService notification
 ```C#
         await _Notification.SendNotificationAsync(new BlazorNotifierMessage {Title = $"Step {i}", FromUserId = UserId, Type = BlazorNotifierType.Info});
