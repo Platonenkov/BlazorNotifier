@@ -31,16 +31,19 @@ Install-Package BlazorNotifier -Version 1.0.0
     endpoints.MapControllers();
   });
   ```
-  5.3 add conroller to api
+  5.3 add conroller to api with name NotificationsController
   
   sample
   ```C#
-      public class testApiController: NotifierController
+    [Route("api/[controller]")]
+    [ApiController]
+    public class NotificationsController : NotifierController
     {
-        public testApiController(IHubContext<NotificationHub> hubContext) : base(hubContext)
-        {
-        }
+
+        public NotificationsController(IHubContext<NotificationHub> hubContext) : base(hubContext) { }
+
     }
+
   ```
 ### 6 Install package BlazorNotifier to CLient 
 ### 7 Edit Client Programm.cs
