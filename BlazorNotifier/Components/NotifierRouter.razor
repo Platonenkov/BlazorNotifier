@@ -1,0 +1,12 @@
+﻿@inject BlazorNotifierClientService Notifi
+<div class="row">
+        <p style="margin-right: 10px">Notifier connection Status: @Notifi.connectionStatus </p>
+        <div @bind-style="Notifi.StatusColor" @bind-style:event="oninput"></div>
+</div>
+@code
+{
+    protected override void OnInitialized()
+    {
+        Notifi.OnChange += StateHasChanged;
+    }
+}

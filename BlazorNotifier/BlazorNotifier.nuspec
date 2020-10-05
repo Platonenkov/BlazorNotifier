@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package >
+  <metadata>
+    <id>BlazorNotifier</id>
+    <version>1.0.0</version>
+	  <title>BlazorNotifier</title>
+    <authors>APlatonenkov</authors>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="expression">MIT</license>
+    <projectUrl>https://github.com/Platonenkov/BlazorNotifier</projectUrl>
+	  <owners>https://github.com/Platonenkov</owners>
+    <description>It will help you send message to client from server</description>
+    <releaseNotes>send message.</releaseNotes>
+    <copyright>Copyright 2020</copyright>
+    <tags>Blazor Notification Message</tags>
+  </metadata>
+</package>
