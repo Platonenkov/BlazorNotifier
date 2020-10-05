@@ -133,6 +133,6 @@ in Server conroller add to constructor BlazorNotifierServerService notification
 
 just call to api service
 ```C#
-        await _Notification.SendNotificationAsync(new BlazorNotifierMessage {Title = $"Step {i}", FromUserId = UserId, Type = BlazorNotifierType.Info});
+        await notification.SendNotificationAsync(new BlazorNotifierMessage {Title = $"Step {i}", FromUserId = UserId, Type = BlazorNotifierType.Info});
 ```
  
