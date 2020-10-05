@@ -1,5 +1,6 @@
 # BlazorNotifier
 Blazor notifier from server to client by SignalR
+Install-Package BlazorNotifier -Version 1.0.0
 
 ## How Use
 
@@ -30,7 +31,7 @@ Blazor notifier from server to client by SignalR
   });
   ```
   
-### 6 Install package BlazorNotifier to CLient
+### 6 Install package BlazorNotifier to CLient 
 ### 7 Edit Client Programm.cs
  add service
  ```C#
