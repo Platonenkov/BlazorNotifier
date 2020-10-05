@@ -71,7 +71,7 @@ sample
 @inject BlazorNotifierClientService NotifiService
 
 <div style="padding: 10px 10px 10px 10px;line-height: 0.5">
-    @foreach (var (date, message) in Notifi.events.OrderByDescending(i => i.Key))
+    @foreach (var (date, message) in NotifiService.events.OrderByDescending(i => i.Key))
     {
         <p >@date: @message</p>
     }
@@ -80,7 +80,7 @@ sample
 {
     protected override void OnInitialized()
     {
-        Notifi.OnChange += StateHasChanged;
+        NotifiService.OnChange += StateHasChanged;
     }
 
 }
@@ -124,12 +124,14 @@ notifications - > collection of BlazorNotifierMessage
 From Client you mast send ConnectionId to controller
 ```C#
 @inject BlazorNotifierClientService NotifiService
+@inject HttpClient client
+
 
 var result = await client.GetAsync($"NotificationTest/GetSomeData/{NotifiService.UserId}");
 ```
-and in conroller just call to api service
+in Server conroller add to constructor BlazorNotifierServerService notification
 
-add to constructor BlazorNotifierServerService notification
+just call to api service
 ```C#
         await _Notification.SendNotificationAsync(new BlazorNotifierMessage {Title = $"Step {i}", FromUserId = UserId, Type = BlazorNotifierType.Info});
 ```
