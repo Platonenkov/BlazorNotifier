@@ -1,5 +1,6 @@
 # BlazorNotifier
 Blazor notifier from server to client by SignalR
+
 Install-Package BlazorNotifier -Version 1.0.0
 
 ## How Use
