@@ -1,7 +1,7 @@
 # BlazorNotifier
 Blazor notifier from server to client by SignalR
 
-Install-Package BlazorNotifier -Version 1.0.0.1
+Install-Package BlazorNotifier -Version 1.0.0.2
 
 ## How Use
 
@@ -74,7 +74,7 @@ sample
 @inject BlazorNotifierClientService NotifiService
 
 <div style="padding: 10px 10px 10px 10px;line-height: 0.5">
-    @foreach (var (date, message) in NotifiService.events.OrderByDescending(i => i.Key))
+    @foreach (var (date, message) in NotifiService.Events.OrderByDescending(i => i.Key))
     {
         <p >@date: @message</p>
     }
@@ -138,4 +138,11 @@ just call to api service
 ```C#
         await notification.SendNotificationAsync(new BlazorNotifierMessage {Title = $"Step {i}", FromUserId = UserId, Type = BlazorNotifierType.Info});
 ```
- 
+
+### Send Debug Message On CLient
+```C#
+@inject BlazorNotifierClientService Notifier
+
+Notifier.SendNotification("Console Debug Test", BlazorNotifierType.Debug);
+```
+Сообщение отобразится в консоли
