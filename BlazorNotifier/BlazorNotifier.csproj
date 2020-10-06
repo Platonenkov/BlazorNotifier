@@ -11,11 +11,11 @@
     <PackageProjectUrl>https://github.com/Platonenkov/BlazorNotifier</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Platonenkov/BlazorNotifier</RepositoryUrl>
     <PackageTags>Blazor Notification Message</PackageTags>
-    <PackageReleaseNotes>this package will help you send notification massage from server to client</PackageReleaseNotes>
+    <PackageReleaseNotes>Comments to code, client debug notifications, connection status change Action</PackageReleaseNotes>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <AssemblyVersion>1.0.0.1</AssemblyVersion>
-    <FileVersion>1.0.0.1</FileVersion>
-    <Version>1.0.0.1</Version>
+    <AssemblyVersion>1.0.0.2</AssemblyVersion>
+    <FileVersion>1.0.0.2</FileVersion>
+    <Version>1.0.0.2</Version>
   </PropertyGroup>
 
 
