@@ -11,11 +11,11 @@
     <PackageProjectUrl>https://github.com/Platonenkov/BlazorNotifier</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Platonenkov/BlazorNotifier</RepositoryUrl>
     <PackageTags>Blazor Notification Message</PackageTags>
-    <PackageReleaseNotes>Comments to code, client debug notifications, connection status change Action</PackageReleaseNotes>
+    <PackageReleaseNotes>Progress bar notifications</PackageReleaseNotes>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <AssemblyVersion>1.0.0.2</AssemblyVersion>
-    <FileVersion>1.0.0.2</FileVersion>
-    <Version>1.0.0.2</Version>
+    <AssemblyVersion>2.0.0.2</AssemblyVersion>
+    <FileVersion>2.0.0.2</FileVersion>
+    <Version>2.0.0.2</Version>
   </PropertyGroup>
 
 

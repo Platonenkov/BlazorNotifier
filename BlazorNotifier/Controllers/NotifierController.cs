@@ -24,7 +24,7 @@ namespace BlazorNotifier.Controllers
         }
 
         /// <summary>
-        /// Получает информационное сообщение отправленное в теле запроса
+        /// Пересылает информационное сообщение отправленное в теле запроса
         /// </summary>
         /// <returns></returns>
         [HttpPost("SendTitle")]
@@ -35,6 +35,42 @@ namespace BlazorNotifier.Controllers
             var inbound = JsonConvert.DeserializeObject<string>(json);
             await _HubContext.Clients.All.SendAsync("notification", new BlazorNotifierMessage { Title = inbound });
             return Ok("Notification has been sent succesfully!");
+        }
+        /// <summary>
+        /// Пересылает сообщение о завершении процесса
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost("progress/finish")]
+        public async Task<IActionResult> ProgressFinish(BlazorNotifierProgressMessage Message)
+        {
+            if (string.IsNullOrWhiteSpace(Message.ToUserId))
+                return NotFound();
+            await _HubContext.Clients.Client(Message.ToUserId).SendAsync("ProgressFinish", Message);
+            return Ok("Progress Finished");
+        }
+        /// <summary>
+        /// Пересылает сообщение об изменении процесса
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost("progress/update")]
+        public async Task<IActionResult> ProgressUpdate(BlazorNotifierProgressMessage Message)
+        {
+            if (string.IsNullOrWhiteSpace(Message.ToUserId))
+                return NotFound();
+            await _HubContext.Clients.Client(Message.ToUserId).SendAsync("ProgressUpdate", Message);
+            return Ok("Progress Updated");
+        }
+        /// <summary>
+        /// Пересылает сообщение об изменении процесса
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost("progress/Add")]
+        public async Task<IActionResult> ProgressAddNew(BlazorNotifierProgressMessage Message)
+        {
+            if (string.IsNullOrWhiteSpace(Message.ToUserId))
+                return NotFound();
+            await _HubContext.Clients.Client(Message.ToUserId).SendAsync("ProgressStart", Message);
+            return Ok("Progress Added");
         }
 
         /// <summary>

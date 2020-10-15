@@ -44,6 +44,50 @@ namespace BlazorNotifier.Services.Implementations
                 return false;
             }
         }
+
+        public async Task<bool> FinishProgress(BlazorNotifierProgressMessage Message)
+        {
+            try
+            {
+                using var response = await new HttpClient().PostAsJsonAsync("https://localhost:44303/api/notifications/progress/finish", Message);
+                return response.IsSuccessStatusCode;
+            }
+            catch (Exception e)
+            {
+                _Logger.LogError("Ошибка отправки сообщения на сервер: {error}", e.Message);
+                return false;
+            }
+
+        }
         #endregion
+
+        public async Task<bool> UpdateProgress(BlazorNotifierProgressMessage Message)
+        {
+            try
+            {
+                using var response = await new HttpClient().PostAsJsonAsync("https://localhost:44303/api/notifications/progress/update", Message);
+                return response.IsSuccessStatusCode;
+            }
+            catch (Exception e)
+            {
+                _Logger.LogError("Ошибка отправки сообщения на сервер: {error}", e.Message);
+                return false;
+            }
+
+        }
+        public async Task<bool> AddNewProgress(BlazorNotifierProgressMessage Message)
+        {
+            try
+            {
+                using var response = await new HttpClient().PostAsJsonAsync("https://localhost:44303/api/notifications/progress/Add", Message);
+                return response.IsSuccessStatusCode;
+            }
+            catch (Exception e)
+            {
+                _Logger.LogError("Ошибка отправки сообщения на сервер: {error}", e.Message);
+                return false;
+            }
+
+        }
     }
 }

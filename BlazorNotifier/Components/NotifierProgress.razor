@@ -1,0 +1,25 @@
+﻿@inject BlazorNotifierClientService Notifi
+
+@if (Notifi.ProgressMessages.Count > 0)
+{
+    <div style="padding: 10px 10px 10px 10px;line-height: 0.5">
+        @foreach (var message in Notifi.ProgressMessages)
+        {
+            <div style="flex-direction: column">
+                <p>@message.Title</p>
+                <p>@message.Message</p>
+                <progress @bind-value="@message.Percent" max="100" @bind-value:event="onchange">
+                    <span id="value">@message.Percent @message.Message</span>
+                </progress>
+            </div>
+        }
+    </div>
+}
+@code
+{
+    protected override void OnInitialized()
+    {
+        Notifi.OnProgressChange += StateHasChanged;
+    }
+
+}

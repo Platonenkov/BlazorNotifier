@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace BlazorNotifier.Classes
 {
@@ -10,15 +11,5 @@ namespace BlazorNotifier.Classes
         public bool IsPrivate { get; set; } = true;
         public string FromUserId { get; set; }
         public string ToUserId { get; set; }
-    }
-
-    public enum BlazorNotifierType
-    {
-        none,
-        Debug,
-        Success,
-        Info,
-        Warning,
-        Error
     }
 }

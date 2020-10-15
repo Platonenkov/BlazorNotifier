@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Linq;
 using System.Threading.Tasks;
 using BlazorNotifier.Classes;
 using Microsoft.AspNetCore.SignalR.Client;
@@ -15,11 +16,15 @@ namespace BlazorNotifier.Services.Implementations
         /// <summary> Событие при изменениях в сервисе </summary>
         public event Action OnChange;
         /// <summary> Событие при изменении статуса подключения </summary>
-        public event Action OnConnectionStatusChange;
+        public event Action OnConnectionStatusChange; 
+        /// <summary> Событие при изменении статуса подключения </summary>
+        public event Action OnProgressChange;
         /// <summary> Событие при изменениях в сервисе </summary>
         private void NotifyStateChanged() => OnChange?.Invoke();
         /// <summary> Событие при изменении статуса подключения </summary>
         private void NotifyConnectionChanged() => OnConnectionStatusChange?.Invoke();
+        /// <summary> Событие при изменении статуса подключения </summary>
+        private void NotifyProgressChanged() => OnProgressChange?.Invoke();
 
         #endregion
 
@@ -89,6 +94,7 @@ namespace BlazorNotifier.Services.Implementations
         {
             //Добавляя новое сообщение в коллекцию - записываем сообщение в события
             Notifications.CollectionChanged += OnNotificationsCollectionChanged;
+            ProgressMessages.CollectionChanged += OnNotificationsCollectionChanged;
 
             _Connection = new HubConnectionBuilder()
                 .WithUrl(Url)
@@ -103,7 +109,39 @@ namespace BlazorNotifier.Services.Implementations
             _Connection.Closed += OnConnectionClosed;
             //выполняем при получении сообщений клиентом
             _Connection.On<BlazorNotifierMessage>("notification", DoWhenClientGetNewMessage);
+            _Connection.On<BlazorNotifierProgressMessage>("ProgressFinish", DoWhenProgressFinish);
+            _Connection.On<BlazorNotifierProgressMessage>("ProgressUpdate", DoWhenProgressUpdate);
+            _Connection.On<BlazorNotifierProgressMessage>("ProgressStart", DoWhenProgressStart);
         }
+
+
+        #region PROGRESS
+
+        public ObservableCollection<BlazorNotifierProgressMessage> ProgressMessages = new ObservableCollection<BlazorNotifierProgressMessage>();
+        private void DoWhenProgressUpdate(BlazorNotifierProgressMessage Message)
+        {
+            var progress = ProgressMessages.FirstOrDefault(m => m.Id == Message.Id);
+            progress?.Update(Message);
+            NotifyProgressChanged();
+        }
+
+        private void DoWhenProgressStart(BlazorNotifierProgressMessage Message)
+        {
+            ProgressMessages.Add(Message);
+            NotifyProgressChanged();
+        }
+
+        private void DoWhenProgressFinish(BlazorNotifierProgressMessage Message)
+        {
+            var progress = ProgressMessages.FirstOrDefault(m => m.Id == Message.Id);
+            if (progress is null)
+                return;
+            ProgressMessages.Remove(progress);
+            NotifyProgressChanged();
+        }
+
+        #endregion
+
         /// <summary>
         /// Выполняем при получении сообщений клиентом
         /// </summary>
@@ -134,15 +172,18 @@ namespace BlazorNotifier.Services.Implementations
         /// <param name="e"></param>
         private void OnNotificationsCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            if (!(sender is ObservableCollection<BlazorNotifierMessage>))
+            if (sender is ObservableCollection<BlazorNotifierMessage>)
             {
-                return;
+                foreach (BlazorNotifierMessage message in e.NewItems)
+                {
+                    ShowNotification(message);
+                }
             }
-
-            foreach (BlazorNotifierMessage message in e.NewItems)
-            {
-                ShowNotification(message);
-            }
+            //else if( sender is ObservableCollection<BlazorNotifierProgressMessage>)
+            //    foreach (BlazorNotifierProgressMessage message in e.NewItems)
+            //    {
+            //        ShowNotification(new BlazorNotifierMessage{Title = $"{message.Title}: {message.Message}: {message.Percent}"});
+            //    }
         }
 
         #endregion
