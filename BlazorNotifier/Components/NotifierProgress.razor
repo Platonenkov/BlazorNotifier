@@ -1,4 +1,4 @@
-﻿<div @ref="@head" id="@Id" class="notification__message message--info" @onclick=OnClick>
+﻿<div id="@Id" class="notification__message message--Info" @onclick=OnClick style="@(IsVisible ? "transform: translateX(0%); opacity: 1; visibility: visible;":null)">
     <span>@Title</span>
     <div class="progress-message"><span>@Message</span></div>
     <div class="progress">
@@ -15,23 +15,4 @@
 </div>
 @code
 { 
-    private ElementReference head { get; set; }
-
-    [Parameter]
-    public Guid Id {get; set; }
-    [Parameter]
-    public string Title {get; set; }
-    [Parameter]
-    public string Message {get; set; }
-    [Parameter]
-    public int? Percent {get; set; }
-    [Parameter]
-    public EventCallback<Guid> OnClickCallback { get; set; }
-    [Parameter]
-    public EventCallback<Guid> OnCloseClick { get; set; }
-
-    void OnClick()=> OnClickCallback.InvokeAsync(Id);
-
-    void OnClose() => OnCloseClick.InvokeAsync(Id);
-
 }

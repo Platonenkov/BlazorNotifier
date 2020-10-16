@@ -104,6 +104,7 @@
 }
 
 .progress-message {
+    width: 320px;
     max-width: 320px;
     font-size: 0.8rem;
 }
@@ -115,6 +116,7 @@
 }
 
 .notification__message p {
+    width: 320px;
     max-width: 320px;
     font-size: 0.8rem;
     grid-column: 1/-1;
@@ -146,7 +148,7 @@
 /* change the border color according to the different modifiers
 ! for each modifier specify also an svg icon in the background, to highlight the message
 */
-.message--info {
+.message--Info {
     border-left-color: #90dee9;
     background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle stroke="none" fill="%2390dee9" cx="50" cy="22" r="8"></circle><path fill="none" stroke="%2390dee9" stroke-width="12" stroke-linejoin="round" stroke-linecap="round" d="M 45 40 h 5 v 40 h -5 h 10"></path></svg>'), hsl(0, 0%, 100%);
     background-repeat: no-repeat;
@@ -154,7 +156,7 @@
     background-position: 100% 100%;
 }
 
-.message--success {
+.message--Success {
     border-left-color: #90e990;
     border-left-color: hsl(120, 67%, 74%);
     background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="none" stroke="%2390e990" stroke-width="12" stroke-linejoin="round" stroke-linecap="round" d="M 20 52 l 25 25 l 30 -50"></path></svg>'), hsl(0, 0%, 100%);
@@ -163,7 +165,7 @@
     background-position: 100% 100%;
 }
 
-.message--warning {
+.message--Warning {
     border-left-color: #e9e090;
     border-left-color: hsl(54, 67%, 74%);
     background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="none" stroke="%23e9e090" stroke-width="12" stroke-linejoin="round" stroke-linecap="round" d="M 50 18 v 40"></path><circle stroke="none" fill="%23e9e090" cx="50" cy="78" r="8"></circle></svg>'), hsl(0, 0%, 100%);
@@ -172,7 +174,7 @@
     background-position: 100% 100%;
 }
 
-.message--error {
+.message--Error {
     border-left-color: #e99090;
     border-left-color: hsl(0, 67%, 74%);
     background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><g transform="translate(50 50) rotate(45)"><path fill="none" stroke="%23e99090" stroke-width="12" stroke-linejoin="round" stroke-linecap="round" d="M 0 -30 v 60 z M -30 0 h 60"></path></g></svg>'), hsl(0, 0%, 100%);

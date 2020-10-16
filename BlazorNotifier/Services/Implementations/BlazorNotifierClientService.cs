@@ -4,13 +4,18 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Timers;
 using BlazorNotifier.Classes;
 using Microsoft.AspNetCore.SignalR.Client;
 
 namespace BlazorNotifier.Services.Implementations
 {
-    public class BlazorNotifierClientService
+    public class BlazorNotifierClientService:IDisposable
     {
+        private Timer Countdown;
+        public event Action<object> OnShow;
+        public event Action OnHide;
+
         #region События
 
         /// <summary> Событие при изменениях в сервисе </summary>
@@ -206,5 +211,55 @@ namespace BlazorNotifier.Services.Implementations
         }
 
         #endregion
+
+        #region IDisposable
+
+        public void Dispose()
+        {
+            Countdown?.Dispose();
+        }
+
+        #endregion
+        public void ShowMessage(BlazorNotifierMessage message)
+        {
+            OnShow?.Invoke(message);
+            StartCountdown();
+        }
+        public void ShowProgress(BlazorNotifierProgressMessage progress)
+        {
+            OnShow?.Invoke(progress);
+            StartCountdown();
+        }
+
+        private void StartCountdown()
+        {
+            SetCountdown();
+
+            if (Countdown.Enabled)
+            {
+                Countdown.Stop();
+                Countdown.Start();
+            }
+            else
+            {
+                Countdown.Start();
+            }
+        }
+
+        private void SetCountdown()
+        {
+            if (Countdown == null)
+            {
+                Countdown = new Timer(5000);
+                Countdown.Elapsed += HideToast;
+                Countdown.AutoReset = false;
+            }
+        }
+
+        private void HideToast(object source, ElapsedEventArgs args)
+        {
+            OnHide?.Invoke();
+        }
+
     }
 }

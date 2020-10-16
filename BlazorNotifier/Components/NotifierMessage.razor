@@ -1,5 +1,6 @@
 ﻿@using BlazorNotifier.Classes
-<div id="@Id" class="notification__message message--@Type" @onclick="OnClick">
+@using System.Timers
+<div id="@Id" class="notification__message message--@Type" @onclick="OnClick" style="@(IsVisible ? "transform: translateX(0%); opacity: 1; visibility: visible;":null)">
     <h1>@Type</h1>
     <p>@Title</p>
     <button aria-labelledby="button-dismiss-@Id" @onclick="OnClose">
@@ -11,21 +12,3 @@
         </svg>
     </button >
 </div>
-@code
-{
-    [Parameter]
-    public Guid Id{get; set; }
-    [Parameter]
-    public string Title{get; set; }
-    [Parameter]
-    public BlazorNotifierType Type{get; set; }
-    [Parameter]
-    public EventCallback<Guid> OnClickCallback { get; set; }
-    [Parameter]
-    public EventCallback<Guid> OnCloseClick { get; set; }
-
-    void OnClick()=> OnClickCallback.InvokeAsync(Id);
-
-    void OnClose() => OnCloseClick.InvokeAsync(Id);
-
-}
