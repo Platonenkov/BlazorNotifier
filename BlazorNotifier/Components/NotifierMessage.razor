@@ -1,9 +1,7 @@
-﻿<div @ref="@head" id="@Id" class="notification__message message--info" @onclick=OnClick>
-    <span>@Title</span>
-    <div class="progress-message"><span>@Message</span></div>
-    <div class="progress">
-        <div class="progress-bar" style="width: @Percent%" aria-caluenow="0" aria-valuemax="100"></div>
-    </div>
+﻿@using BlazorNotifier.Classes
+<div id="@Id" class="notification__message message--@Type" @onclick="OnClick">
+    <h1>@Type</h1>
+    <p>@Title</p>
     <button aria-labelledby="button-dismiss-@Id" @onclick="OnClose">
         <span id="button-dismiss-@Id" hidden> Dismiss</span >
         <svg viewBox="0 0 100 100" width="10" height="10">
@@ -14,17 +12,13 @@
     </button >
 </div>
 @code
-{ 
-    private ElementReference head { get; set; }
-
+{
     [Parameter]
-    public Guid Id {get; set; }
+    public Guid Id{get; set; }
     [Parameter]
-    public string Title {get; set; }
+    public string Title{get; set; }
     [Parameter]
-    public string Message {get; set; }
-    [Parameter]
-    public int? Percent {get; set; }
+    public BlazorNotifierType Type{get; set; }
     [Parameter]
     public EventCallback<Guid> OnClickCallback { get; set; }
     [Parameter]

@@ -1,14 +1,12 @@
 ﻿using System;
+using BlazorNotifier.Classes.Base;
 
 namespace BlazorNotifier.Classes
 {
-    public class BlazorNotifierProgressMessage
+    public class BlazorNotifierProgressMessage : BlazorNotifierBaseMessage
     {
-        public string Title { get;  set; }
         public string Message { get;  set;}
         public int? Percent { get;  set;}
-        public string ToUserId { get;  set; }
-        public Guid Id { get;  set; }
 
         public BlazorNotifierProgressMessage(Guid id, string title, string message, int? percent, string toUser)
         {
@@ -30,5 +28,6 @@ namespace BlazorNotifier.Classes
             this.Message = Message.Message;
             Percent = Message.Percent;
         }
+
     }
 }
