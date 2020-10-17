@@ -8,7 +8,7 @@
     <div class="notification-area">
         @foreach (var message in Notifi.ProgressMessages)
         {
-            <BlazorNotifier.Components.NotifierProgress Id="@message.Id" Title="@message.Title" Message="@message.Message" OnCloseClick="@Notifi.CloseProgress" />
+            <BlazorNotifier.Components.NotifierProgress Id="@message.Id" Title="@message.Title" Message="@message.Message" OnClose="@Notifi.CloseProgress" />
 
         }
         @foreach (var message in Notifi.Notifications)
@@ -25,6 +25,7 @@
         Notifi.OnProgressChange += StateHasChanged;
         Notifi.OnChange += StateHasChanged;
         Notifi.Notifications.CollectionChanged += (Sender, Args) => StateHasChanged();
+        Notifi.ProgressMessages.CollectionChanged += (Sender, Args) => StateHasChanged();
     }
 
 

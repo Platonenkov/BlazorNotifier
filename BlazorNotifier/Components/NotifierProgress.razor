@@ -1,10 +1,10 @@
-﻿<div id="@Id" class="notification__message message--Warning" @onclick=OnClick style="@(IsVisible ? "transform: translateX(0%); opacity: 1; visibility: visible;":null)">
+﻿<div id="@Id" class="notification__message message--Warning" @onclick=Click style="@(IsVisible ? "transform: translateX(0%); opacity: 1; visibility: visible;":null)">
     <span>@Title</span>
     <div class="progress-message"><span>@Message</span></div>
     <div class="progress">
         <div class="progress-bar" style="width: @Percent%" aria-caluenow="0" aria-valuemax="100"></div>
     </div>
-    <button aria-labelledby="button-dismiss-@Id" @onclick="OnClose">
+    <button aria-labelledby="button-dismiss-@Id" @onclick="Close">
         <span id="button-dismiss-@Id" hidden> Dismiss</span >
         <svg viewBox="0 0 100 100" width="10" height="10">
             <g stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none">

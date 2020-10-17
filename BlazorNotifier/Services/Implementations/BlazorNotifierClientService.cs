@@ -151,7 +151,6 @@ namespace BlazorNotifier.Services.Implementations
         private void DoWhenClientGetNewMessage(BlazorNotifierMessage message)
         {
             Notifications.Add(message);
-            Console.WriteLine($"{message.Id}  || {message.Title}");
             NotifyStateChanged();
         }
 
@@ -230,22 +229,46 @@ namespace BlazorNotifier.Services.Implementations
                     {
                         foreach (BlazorNotifierMessage message in e.NewItems)
                         {
-                            Console.WriteLine($"сообщение добавлено{message.Id} | {message.Title}");
+                            Console.WriteLine($"сообщение добавлено {message.Id} | {message.Title}");
                             LogNotification(message);
                         }
                         break;
                     }
-                    case NotifyCollectionChangedAction.Move: break;
-                    case NotifyCollectionChangedAction.Remove:
+                    case NotifyCollectionChangedAction.Move:
                     {
-                        foreach (BlazorNotifierMessage message in e.NewItems)
+                        foreach (BlazorNotifierMessage message in e.OldItems)
                         {
-                            Console.WriteLine($"Удалено сообщение {message.Id} | {message.Title}");
+                            Console.WriteLine($"Move сообщение {message.Id} | {message.Title}");
                         }
                         break;
                     }
-                    case NotifyCollectionChangedAction.Replace: break;
-                    case NotifyCollectionChangedAction.Reset: break;
+
+                    case NotifyCollectionChangedAction.Remove:
+                    {
+                        foreach (BlazorNotifierMessage message in e.OldItems)
+                        {
+                            Console.WriteLine($"Remove сообщение {message.Id} | {message.Title}");
+                        }
+                        break;
+                    }
+                    case NotifyCollectionChangedAction.Replace:
+                    {
+                        foreach (BlazorNotifierMessage message in e.OldItems)
+                        {
+                            Console.WriteLine($"Replace сообщение {message.Id} | {message.Title}");
+                        }
+                        break;
+                    }
+
+                    case NotifyCollectionChangedAction.Reset:
+                    {
+                        foreach (BlazorNotifierMessage message in e.OldItems)
+                        {
+                            Console.WriteLine($"Reset сообщение {message.Id} | {message.Title}");
+                        }
+                        break;
+                    }
+
                     default: throw new ArgumentOutOfRangeException();
                 }
             }

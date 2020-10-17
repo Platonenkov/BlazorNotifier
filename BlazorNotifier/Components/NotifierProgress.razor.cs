@@ -20,67 +20,34 @@ namespace BlazorNotifier.Components
         [Parameter]
         public int? Percent { get; set; }
         [Parameter]
-        public EventCallback<Guid> OnClickCallback { get; set; }
+        public EventCallback<Guid> OnClick { get; set; }
         [Parameter]
-        public EventCallback<Guid> OnCloseClick { get; set; }
+        public EventCallback<Guid> OnClose { get; set; }
 
-        void OnClick() => OnClickCallback.InvokeAsync(Id);
+        void Click() => OnClick.InvokeAsync(Id);
 
-        private bool IsClosed = false;
-        void OnClose()
-        {
-            IsClosed = true;
-            HideToast();
-            Task.Delay(TimeSpan.FromMilliseconds(1));
-            OnCloseClick.InvokeAsync(Id);
-        }
-
-        private Timer Countdown;
-        bool IsVisible { get; set; }
-
-        protected override void OnInitialized()
-        {
-            ShowMessage();
-        }
-
-        private void ShowMessage()
-        {
-            IsVisible = true;
-            this.StateHasChanged();
-            StartCountdown();
-        }
-
-        private void StartCountdown()
-        {
-            if (Countdown == null)
-            {
-                Countdown = new Timer(5000);
-                Countdown.Elapsed += HideToast;
-                Countdown.AutoReset = false;
-            }
-
-            if (Countdown.Enabled)
-            {
-                Countdown.Stop();
-                Countdown.Start();
-            }
-            else
-            {
-                Countdown.Start();
-            }
-        }
-        private void HideToast()
+        void Close()
         {
             IsVisible = false;
-            StateHasChanged();
+            Task.Run(async
+                () =>
+            {
+                await Task.Delay(100);
+                await OnClose.InvokeAsync(Id);
+                StateHasChanged();
+
+            });
         }
 
-        private void HideToast(object source, ElapsedEventArgs args)
+        private bool _IsVisible;
+        bool IsVisible
         {
-            IsVisible = false;
-            if (!IsClosed)
-                OnClose();
-            StateHasChanged();
+            get => _IsVisible;
+            set
+            {
+                _IsVisible = value;
+                StateHasChanged();
+            }
         }
 
     }

@@ -22,8 +22,10 @@
     }
     protected override void OnInitialized()
     {
+        NotifiService.OnProgressChange += StateHasChanged;
         NotifiService.OnChange += StateHasChanged;
         NotifiService.Notifications.CollectionChanged += (Sender, Args) => StateHasChanged();
+        NotifiService.ProgressMessages.CollectionChanged += (Sender, Args) => StateHasChanged();
     }
 
 
