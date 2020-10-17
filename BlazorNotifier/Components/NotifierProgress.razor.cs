@@ -32,7 +32,6 @@ namespace BlazorNotifier.Components
             Task.Run(async
                 () =>
             {
-                await Task.Delay(100);
                 await OnClose.InvokeAsync(Id);
                 StateHasChanged();
 
@@ -48,6 +47,16 @@ namespace BlazorNotifier.Components
                 _IsVisible = value;
                 StateHasChanged();
             }
+        }
+        protected override void OnInitialized()
+        {
+            Task.Run(async
+                () =>
+            {
+                await Task.Delay(10);
+                IsVisible = true;
+            });
+
         }
 
     }

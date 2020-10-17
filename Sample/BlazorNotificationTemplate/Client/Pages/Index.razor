@@ -5,7 +5,7 @@
 @inject BlazorNotifierClientService NotifiService
 
 <button class="btn btn-info" @onclick="StartTest">Start Test</button>
-@foreach (var messsage in NotifiService.Notifications)
+@foreach (var messsage in NotifiService.Notification.Messages)
 {
     <p>@messsage.Id    |   @messsage.Title</p>
 }
@@ -22,10 +22,7 @@
     }
     protected override void OnInitialized()
     {
-        NotifiService.OnProgressChange += StateHasChanged;
         NotifiService.OnChange += StateHasChanged;
-        NotifiService.Notifications.CollectionChanged += (Sender, Args) => StateHasChanged();
-        NotifiService.ProgressMessages.CollectionChanged += (Sender, Args) => StateHasChanged();
     }
 
 

@@ -32,10 +32,10 @@ namespace BlazorNotifier.Components
         void Close()
         {
             IsVisible = false;
-            Task.Run(async 
+            Task.Run(async
                 () =>
                 {
-                    await Task.Delay(100);
+                    //await Task.Delay(100);
                     await OnClose.InvokeAsync(Id);
                     StateHasChanged();
 
@@ -53,16 +53,19 @@ namespace BlazorNotifier.Components
             }
         }
 
+
         protected override void OnInitialized()
         {
-            IsVisible = true;
-            Task.Run(async 
+            Task.Run(async
                 () =>
-                {
-                    await Task.Delay(TimeSpan.FromSeconds(TimeOut));
-                    Close();
-                });
-        }
+            {
+                await Task.Delay(10);
+                IsVisible = true;
 
+                await Task.Delay(TimeSpan.FromSeconds(TimeOut-1));
+                Close();
+            });
+
+        }
     }
 }
