@@ -35,7 +35,7 @@ namespace BlazorNotifier.Components
             Task.Run(async 
                 () =>
                 {
-                    await Task.Delay(1000);
+                    await Task.Delay(100);
                     await OnClose.InvokeAsync(Id);
                     StateHasChanged();
 

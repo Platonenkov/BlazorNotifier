@@ -17,9 +17,9 @@ namespace BlazorNotifier.Classes.Base
             get => _Id;
             set
             {
-                Console.WriteLine($"old {_Id}");
+                Console.WriteLine($"old {_Id} for {Title}");
                 _Id = value;
-                Console.WriteLine($"new {_Id}");
+                Console.WriteLine($"new {_Id} for {Title}");
             }
         }
     }

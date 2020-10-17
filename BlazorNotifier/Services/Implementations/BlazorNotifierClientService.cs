@@ -155,10 +155,30 @@ namespace BlazorNotifier.Services.Implementations
             NotifyStateChanged();
         }
 
-        public async Task CloseMessage(Guid id)
+        public void CloseMessage(Guid id)
         {
-
+            var message = Notifications.FirstOrDefault(m => m.Id == id);
+            if (message is null)
+            {
+                Console.WriteLine($"NOT FIND {id}");
+                OnChange?.Invoke();
+                return;
+            }
+            Notifications.Remove(message);
+            OnChange?.Invoke();
         }
+        public void CloseProgress(Guid id)
+        {
+            var message = ProgressMessages.FirstOrDefault(m => m.Id == id);
+            if (message is null)
+            {
+                OnChange?.Invoke();
+                return;
+            }
+            ProgressMessages.Remove(message);
+            OnChange?.Invoke();
+        }
+
         //private async Task StartNotifierTimer(BlazorNotifierMessage message)
         //{
         //    await Task.Run(
