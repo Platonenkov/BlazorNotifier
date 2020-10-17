@@ -8,6 +8,7 @@
     <div class="notification-area">
         @foreach (var message in Notifi.Notification.Progress)
         {
+            <p>@message.Percent</p>
             <BlazorNotifier.Components.NotifierProgress Id="@message.Id" Title="@message.Title" Message="@message.Message" />
 
         }

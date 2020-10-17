@@ -140,7 +140,7 @@ namespace BlazorNotifier.Services.Implementations
                 Id = Progress.Id, Type = BlazorNotifierType.Progress });
         }
 
-        private void DoWhenProgressFinish(BlazorNotifierProgressMessage Message) => Notification.RemoveProgress(Message);
+        private void DoWhenProgressFinish(BlazorNotifierProgressMessage Progress) => Notification.RemoveProgress(Progress.Id);
 
         #endregion
 

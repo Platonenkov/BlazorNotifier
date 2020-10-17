@@ -1,8 +1,9 @@
 ﻿<div id="@Id" class="notification__message message--Warning" @onclick=Click style="@(IsVisible ? "transform: translateX(0%); opacity: 1; visibility: visible;":null)">
     <span>@Title</span>
     <div class="progress-message"><span>@Message</span></div>
+    <progress max="100" value="@Percent" >@Percent</progress>
     <div class="progress">
-        <div class="progress-bar" style="width: @Percent%" aria-caluenow="0" aria-valuemax="100"></div>
+        <div class="progress-bar" role="progressbar" style="width: @($"{Percent}%");" aria-valuemin="0" aria-valuemax="100">@($"{Percent}%")</div>
     </div>
     <button aria-labelledby="button-dismiss-@Id" @onclick="Close">
         <span id="button-dismiss-@Id" hidden> Dismiss</span >
@@ -14,5 +15,5 @@
     </button >
 </div>
 @code
-{ 
+{
 }
