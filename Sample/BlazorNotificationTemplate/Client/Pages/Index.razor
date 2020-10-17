@@ -1,0 +1,26 @@
+﻿@page "/"
+@using BlazorNotifier.Services.Implementations
+@using BlazorNotifier.Services
+@inject HttpClient client
+@inject BlazorNotifierClientService NotifiService
+
+<button class="btn btn-info" @onclick="StartTest">Start Test</button>
+
+@code{
+    async Task StartTest()
+    {
+
+        var result = await client.GetAsync($"NotificationTest/GetSomeData/{NotifiService.UserId}");
+        if (result.IsSuccessStatusCode)
+        {
+
+        }
+
+    }
+    protected override void OnInitialized()
+    {
+        NotifiService.OnChange += StateHasChanged;
+    }
+
+
+}

@@ -1,0 +1,41 @@
+﻿@inherits LayoutComponentBase
+<div class="sidebar">
+    <NavMenu />
+</div>
+
+<div class="main" id="container">
+    <div class="top-row px-4" id="header">
+        <BlazorNotifier.Components.NotifierRouter />
+
+        <a href="https://github.com/Platonenkov/BlazorNotificationTemplate" target="_blank" class="ml-md-auto">See project</a>
+    </div>
+
+    <div class="content px-4" id="body">
+        <BlazorNotifier.Components.NotifierArea />
+        @Body
+    </div>
+    <div class="px-4" id="footer">
+        <BlazorNotifier.Components.LogSection/>
+    </div>
+</div>
+
+<style>
+    
+    #container {
+        min-height:100vh;
+        position:relative;
+    }
+    #header {
+        padding:10px;
+    }
+    #body {
+        padding:10px;
+        padding-bottom:70px;   /* Высота блока "footer" */
+    }
+    #footer {
+        position:absolute;
+        bottom:0;
+        width:100%;
+        height:200px;   /* Высота блока "footer" */
+    }
+</style>

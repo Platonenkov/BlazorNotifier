@@ -1,0 +1,19 @@
+﻿@page "/counter"
+@using BlazorNotifier.Services.Implementations
+@using BlazorNotifier.Classes
+@inject BlazorNotifierClientService Notifi
+<h1>Counter</h1>
+
+<p>Current count: @currentCount</p>
+
+<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+
+@code {
+    private int currentCount = 0;
+
+    private void IncrementCount()
+    {
+        currentCount++;
+        Notifi.Notifications.Add(new BlazorNotifierMessage{Time = DateTime.Now, Title = $"user click on counter, counter = {currentCount}", Type = BlazorNotifierType.Info});
+    }
+}

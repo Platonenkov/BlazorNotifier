@@ -1,0 +1,17 @@
+﻿@inherits LayoutComponentBase
+
+<div class="sidebar">
+    <NavMenu />
+</div>
+
+<div class="main">
+    <div class="top-row px-4">
+        <BlazorNotifier.Components.NotifierRouter />
+
+        <a href="https://github.com/Platonenkov/BlazorNotificationTemplate" target="_blank" class="ml-md-auto">See project</a>
+    </div>
+
+    <div class="content px-4" id="body">
+        @Body
+    </div>
+</div>
