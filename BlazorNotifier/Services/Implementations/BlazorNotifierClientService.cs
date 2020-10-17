@@ -10,12 +10,8 @@ using Microsoft.AspNetCore.SignalR.Client;
 
 namespace BlazorNotifier.Services.Implementations
 {
-    public class BlazorNotifierClientService:IDisposable
+    public class BlazorNotifierClientService
     {
-        private Timer Countdown;
-        public event Action<object> OnShow;
-        public event Action OnHide;
-
         #region События
 
         /// <summary> Событие при изменениях в сервисе </summary>
@@ -40,7 +36,7 @@ namespace BlazorNotifier.Services.Implementations
         }
         #region Notification
         /// <summary> Словарь событий время/сообщение </summary>
-        public Dictionary<DateTime?, string> Events = new Dictionary<DateTime?, string>();
+        public Dictionary<DateTime, string> Events = new Dictionary<DateTime, string>();
         /// <summary> адрес сервиса api </summary>
         string Url = "https://localhost:44303/notificationhub";
         /// <summary> Коллекция уведомительных сообщений </summary>
@@ -88,11 +84,12 @@ namespace BlazorNotifier.Services.Implementations
 
         /// <summary> Запись событий </summary>
         /// <param name="message">сообщение</param>
-        void ShowNotification(BlazorNotifierMessage message)
+        void LogNotification(BlazorNotifierMessage message)
         {
             Events.Add(message.Time, $"{message.Type}: {message.Title}");
             NotifyStateChanged();
         }
+
 
         /// <summary> Подключение к серверу </summary>
         private async void ConnectToServerAsync()
@@ -154,9 +151,37 @@ namespace BlazorNotifier.Services.Implementations
         private void DoWhenClientGetNewMessage(BlazorNotifierMessage message)
         {
             Notifications.Add(message);
+            Console.WriteLine($"{message.Id}  || {message.Title}");
             NotifyStateChanged();
         }
 
+        public async Task CloseMessage(Guid id)
+        {
+
+        }
+        //private async Task StartNotifierTimer(BlazorNotifierMessage message)
+        //{
+        //    await Task.Run(
+        //        () =>
+        //        {
+        //            try
+        //            {
+        //                var timer = new Timer(message.TimeOut * 1000);
+        //                timer.Elapsed += (Sender, Args) =>
+        //                {
+        //                    Notifications.Remove(message);
+        //                    NotifyStateChanged();
+        //                };
+        //                timer.AutoReset = false;
+        //                timer.Start();
+
+        //            }
+        //            catch (Exception e)
+        //            {
+        //                Console.WriteLine($"Ошибка таймера {e.Message}");
+        //            }
+        //        });
+        //}
         /// <summary>
         /// Автоматически присоединяемся к серверу при разъединении
         /// </summary>
@@ -179,16 +204,56 @@ namespace BlazorNotifier.Services.Implementations
         {
             if (sender is ObservableCollection<BlazorNotifierMessage>)
             {
-                foreach (BlazorNotifierMessage message in e.NewItems)
+                switch (e.Action)
                 {
-                    ShowNotification(message);
+                    case NotifyCollectionChangedAction.Add:
+                    {
+                        foreach (BlazorNotifierMessage message in e.NewItems)
+                        {
+                            Console.WriteLine($"сообщение добавлено{message.Id} | {message.Title}");
+                            LogNotification(message);
+                        }
+                        break;
+                    }
+                    case NotifyCollectionChangedAction.Move: break;
+                    case NotifyCollectionChangedAction.Remove:
+                    {
+                        foreach (BlazorNotifierMessage message in e.NewItems)
+                        {
+                            Console.WriteLine($"Удалено сообщение {message.Id} | {message.Title}");
+                        }
+                        break;
+                    }
+                    case NotifyCollectionChangedAction.Replace: break;
+                    case NotifyCollectionChangedAction.Reset: break;
+                    default: throw new ArgumentOutOfRangeException();
                 }
             }
-            //else if( sender is ObservableCollection<BlazorNotifierProgressMessage>)
-            //    foreach (BlazorNotifierProgressMessage message in e.NewItems)
-            //    {
-            //        ShowNotification(new BlazorNotifierMessage{Title = $"{message.Title}: {message.Message}: {message.Percent}"});
-            //    }
+            else if (sender is ObservableCollection<BlazorNotifierProgressMessage>)
+                switch (e.Action)
+                {
+                    case NotifyCollectionChangedAction.Add:
+                    {
+                        foreach (BlazorNotifierProgressMessage message in e.NewItems)
+                        {
+                                Console.WriteLine($"Прогресс добавлен{message.Id} | {message.Title}");
+                                LogNotification(new BlazorNotifierMessage { Title = $"{message.Title}: {message.Message}: {message.Percent}" });
+                        }
+                        break;
+                    }
+                    case NotifyCollectionChangedAction.Move: break;
+                    case NotifyCollectionChangedAction.Remove:
+                    {
+                        foreach (BlazorNotifierProgressMessage message in e.NewItems)
+                        {
+                                Console.WriteLine($"Удален Прогресс {message.Id} | {message.Title}");
+                        }
+                        break;
+                    }
+                    case NotifyCollectionChangedAction.Replace: break;
+                    case NotifyCollectionChangedAction.Reset: break;
+                    default: throw new ArgumentOutOfRangeException();
+                }
         }
 
         #endregion
@@ -211,55 +276,6 @@ namespace BlazorNotifier.Services.Implementations
         }
 
         #endregion
-
-        #region IDisposable
-
-        public void Dispose()
-        {
-            Countdown?.Dispose();
-        }
-
-        #endregion
-        public void ShowMessage(BlazorNotifierMessage message)
-        {
-            OnShow?.Invoke(message);
-            StartCountdown();
-        }
-        public void ShowProgress(BlazorNotifierProgressMessage progress)
-        {
-            OnShow?.Invoke(progress);
-            StartCountdown();
-        }
-
-        private void StartCountdown()
-        {
-            SetCountdown();
-
-            if (Countdown.Enabled)
-            {
-                Countdown.Stop();
-                Countdown.Start();
-            }
-            else
-            {
-                Countdown.Start();
-            }
-        }
-
-        private void SetCountdown()
-        {
-            if (Countdown == null)
-            {
-                Countdown = new Timer(5000);
-                Countdown.Elapsed += HideToast;
-                Countdown.AutoReset = false;
-            }
-        }
-
-        private void HideToast(object source, ElapsedEventArgs args)
-        {
-            OnHide?.Invoke();
-        }
 
     }
 }

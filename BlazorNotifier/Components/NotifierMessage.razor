@@ -1,9 +1,9 @@
 ﻿@using BlazorNotifier.Classes
 @using System.Timers
-<div id="@Id" class="notification__message message--@Type" @onclick="OnClick" style="@(IsVisible ? "transform: translateX(0%); opacity: 1; visibility: visible;":null)">
+<div id="@Id" class="notification__message message--@Type" @onclick="Click" style="@(IsVisible ? "transform: translateX(0%); opacity: 1; visibility: visible;":null)">
     <h1>@Type</h1>
     <p>@Title</p>
-    <button aria-labelledby="button-dismiss-@Id" @onclick="OnClose">
+    <button aria-labelledby="button-dismiss-@Id" @onclick="Close">
         <span id="button-dismiss-@Id" hidden> Dismiss</span >
         <svg viewBox="0 0 100 100" width="10" height="10">
             <g stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none">

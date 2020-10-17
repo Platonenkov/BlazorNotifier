@@ -2,32 +2,45 @@
 @using BlazorNotifier.Classes
 @using System.Collections.ObjectModel
 @inject BlazorNotifierClientService Notifi
-<div class="notification-area">
-            @foreach (var message in Notifi.ProgressMessages)
-            {
-                <BlazorNotifier.Components.NotifierProgress Id="@message.Id" Title="@message.Title" Message="@message.Message" OnCloseClick="@CloseProgress"/>
+@if (Notifi.Notifications.Count > 0 || Notifi.ProgressMessages.Count>0)
+{
+    <p>@Notifi.Notifications.Count</p>
+    <div class="notification-area">
+        @foreach (var message in Notifi.ProgressMessages)
+        {
+            <BlazorNotifier.Components.NotifierProgress Id="@message.Id" Title="@message.Title" Message="@message.Message" OnCloseClick="@CloseProgress" />
 
-            }
-            @foreach (var message in Notifi.Notifications)
-            {
-                <BlazorNotifier.Components.NotifierMessage Id="@message.Id" Title="@message.Title" Type="@message.Type" OnCloseClick="@CloseMessage"/>
-            }
-</div>
+        }
+        @foreach (var message in Notifi.Notifications)
+        {
+            <BlazorNotifier.Components.NotifierMessage Id="@message.Id" Title="@message.Title" Type="@message.Type" TimeOut="@message.TimeOut"
+                                                       OnClose="@CloseMessage"/>
+        }
+    </div>
+
+}
 @code
 {
     void CloseProgress(Guid id)
     {
         var message = Notifi.ProgressMessages.FirstOrDefault(m => m.Id == id);
         if(message is null)
+        {
+            StateHasChanged();
             return;
+        }
         Notifi.ProgressMessages.Remove(message);
         StateHasChanged();
-    } 
+    }
     void CloseMessage(Guid id)
     {
         var message = Notifi.Notifications.FirstOrDefault(m => m.Id == id);
-        if(message is null)
+        if (message is null)
+        {
+            Console.WriteLine($"NOT FIND {id}");
+            StateHasChanged();
             return;
+        }
         Notifi.Notifications.Remove(message);
         StateHasChanged();
     }

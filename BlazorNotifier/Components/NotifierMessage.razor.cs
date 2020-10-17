@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using BlazorNotifier.Classes;
 using Microsoft.AspNetCore.Components;
+using Timer = System.Timers.Timer;
 
 namespace BlazorNotifier.Components
 {
@@ -16,71 +18,50 @@ namespace BlazorNotifier.Components
         [Parameter]
         public Guid Id { get; set; }
         [Parameter]
+        public int TimeOut { get; set; }
+        [Parameter]
         public string Title { get; set; }
         [Parameter]
         public BlazorNotifierType Type { get; set; }
         [Parameter]
-        public EventCallback<Guid> OnClickCallback { get; set; }
+        public EventCallback<Guid> OnClick { get; set; }
         [Parameter]
-        public EventCallback<Guid> OnCloseClick { get; set; }
+        public EventCallback<Guid> OnClose { get; set; }
+        void Click() => OnClick.InvokeAsync(Id);
 
-        void OnClick() => OnClickCallback.InvokeAsync(Id);
-
-        private bool IsClosed = false;
-        void OnClose()
+        void Close()
         {
-            IsClosed = true;
-            HideToast();
-            Task.Delay(TimeSpan.FromMilliseconds(1));
-            OnCloseClick.InvokeAsync(Id);
+            IsVisible = false;
+            Task.Run(async 
+                () =>
+                {
+                    await Task.Delay(1000);
+                    await OnClose.InvokeAsync(Id);
+                    StateHasChanged();
+
+                });
         }
 
-        private Timer Countdown;
-        bool IsVisible { get; set; }
+        private bool _IsVisible;
+        bool IsVisible
+        {
+            get => _IsVisible;
+            set
+            {
+                _IsVisible = value;
+                StateHasChanged();
+            }
+        }
 
         protected override void OnInitialized()
         {
-            ShowMessage();
-        }
-
-        private void ShowMessage()
-        {
             IsVisible = true;
-            this.StateHasChanged();
-            StartCountdown();
-        }
-
-        private void StartCountdown()
-        {
-            if (Countdown == null)
-            {
-                Countdown = new Timer(5000);
-                Countdown.Elapsed += HideToast;
-                Countdown.AutoReset = false;
-            }
-
-            if (Countdown.Enabled)
-            {
-                Countdown.Stop();
-                Countdown.Start();
-            }
-            else
-            {
-                Countdown.Start();
-            }
-        }
-        private void HideToast()
-        {
-            IsVisible = false;
-            StateHasChanged();
-        }
-
-        private void HideToast(object source, ElapsedEventArgs args)
-        {
-            IsVisible = false;
-            if(!IsClosed)
-                OnClose();
-            StateHasChanged();
+            Task.Run(async 
+                () =>
+                {
+                    await Task.Delay(TimeSpan.FromSeconds(TimeOut));
+                    Close();
+                });
         }
 
     }

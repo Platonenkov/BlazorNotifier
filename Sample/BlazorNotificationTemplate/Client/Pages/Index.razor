@@ -5,7 +5,10 @@
 @inject BlazorNotifierClientService NotifiService
 
 <button class="btn btn-info" @onclick="StartTest">Start Test</button>
-
+@foreach (var messsage in NotifiService.Notifications)
+{
+    <p>@messsage.Id    |   @messsage.Title</p>
+}
 @code{
     async Task StartTest()
     {
