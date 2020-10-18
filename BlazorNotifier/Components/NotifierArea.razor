@@ -1,18 +1,14 @@
-﻿@using System.Collections.Specialized
-@using BlazorNotifier.Classes
-@using System.Collections.ObjectModel
-@inject BlazorNotifierClientService Notifi
+﻿@inject BlazorNotifierClientService Notifi
 @if (Notifi.CountOfNotifications > 0)
 {
-    <p>@Notifi.CountOfNotifications</p>
     <div class="notification-area">
         @foreach (var progress in Notifi.Notification.Progress)
         {
-            <BlazorNotifier.Components.NotifierProgress Progress="@progress" OnClose="@(()=>Notifi.CloseProgress(progress.Id))"/>
+            <BlazorNotifier.Components.NotifierProgress Progress="@progress" OnClose="@(() => Notifi.CloseProgress(progress.Id))"/>
         }
         @foreach (var message in Notifi.Notification.Messages)
         {
-            <BlazorNotifier.Components.NotifierMessage Message="@message" OnClose="@(()=>Notifi.CloseMessage(message.Id))"/>
+            <BlazorNotifier.Components.NotifierMessage Message="@message" OnClose="@(() => Notifi.CloseMessage(message.Id))"/>
         }
     </div>
 

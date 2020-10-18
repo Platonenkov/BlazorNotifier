@@ -18,10 +18,6 @@
         <button class="btn btn-info" @onclick="()=> CloseProgress(progress.Id)">close</button>
     </div>
 </div>
-@foreach (var messsage in NotifiService.Notification.Messages)
-{
-    <p>@messsage.Id    |   @messsage.Title</p>
-}
 @code{
     async Task StartTest()
     {
