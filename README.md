@@ -2,7 +2,9 @@
 Blazor notifier from server to client by SignalR
 
 Install-Package BlazorNotifier -Version 2.0.0
-![Demo](https://github.com/Platonenkov/BlazorNotifier/blob/master/Resources/Notifier.gif)
+
+![Demo](https://github.com/Platonenkov/BlazorNotifier/blob/main/Resources/Notifier.gif)
+
 ## How Use
 
 ### 1 Create Api project .NET Core 3.1
