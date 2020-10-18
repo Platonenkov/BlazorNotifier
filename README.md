@@ -2,7 +2,7 @@
 Blazor notifier from server to client by SignalR
 
 Install-Package BlazorNotifier -Version 2.0.0
-
+![Demo](https://github.com/Platonenkov/BlazorNotifier/blob/master/Resources/Notifier.gif)
 ## How Use
 
 ### 1 Create Api project .NET Core 3.1
@@ -51,10 +51,10 @@ Install-Package BlazorNotifier -Version 2.0.0
  ```C#
              builder.Services.AddScoped<BlazorNotifierClientService>();
  ```
-### 8 Edit MainLayout (Not requred)
+### 8 Edit MainLayout
 add Notifier section
 ```C#
-        <BlazorNotifier.Components.NotifierRouter />
+        <BlazorNotifier.Components.NotifierArea />
 ```
 use it to see api-connection status
 
@@ -74,10 +74,11 @@ sample
 @inject BlazorNotifierClientService NotifiService
 
 <div style="padding: 10px 10px 10px 10px;line-height: 0.5">
-    @foreach (var (date, message) in NotifiService.Events.OrderByDescending(i => i.Key))
+    @foreach (var (_, (date, message)) in Notifi.Events.OrderByDescending(i => i.Value.date))
     {
-        <p >@date: @message</p>
+        <p >@date : @message</p>
     }
+
 </div>
 @code
 {
@@ -90,32 +91,10 @@ sample
 ```
 
 you can take
-Notifi.events to show Datetime -> key, and type:message -> value
+Notifi.events to show id -> key, and (date, message)
 
 ore 
-notifications - > collection of BlazorNotifierMessage
-
-```C#
-    public class BlazorNotifierMessage
-    {
-        public string Title { get; set; }
-        public DateTime? Time { get; set; } = DateTime.Now;
-        public BlazorNotifierType Type { get; set; } = BlazorNotifierType.none;
-        public bool IsPrivate { get; set; } = true;
-        public string FromUserId { get; set; }
-        public string ToUserId { get; set; }
-    }
-
-    public enum BlazorNotifierType
-    {
-        none,
-        Debug,
-        Success,
-        Info,
-        Warning,
-        Error
-    }
-```
+notification.Messages - > collection of BlazorNotifierMessage
 
 ### 11 Add Service to Server
 ```C#
