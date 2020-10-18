@@ -27,13 +27,15 @@ namespace BlazorNotificationTemplate.Server.Controllers
         [HttpGet("GetSomeData/{UserId}")]
         public async Task<IActionResult> GetSomeData(string UserId)
         {
+            var random = new Random();
             using var progress = new BlazorNotifierProgress(UserId, _Notification);
 
             var count = 10;
             for (var i = 1; i <= count; i++)
             {
-                await _Notification.SendNotificationAsync(new BlazorNotifierMessage { Title = $"Step {i}", FromUserId = UserId, Type = BlazorNotifierType.Info });
-                var val = i % 4 == 0 ? (int?)null : i * 100 / count;
+                var type = random.Next(2, 6);
+                await _Notification.SendNotificationAsync(new BlazorNotifierMessage { Title = $"Step {i}", FromUserId = UserId, Type = (BlazorNotifierType)type });
+                var val = i == 4||i==5||i==6 ? (int?)null : i * 100 / count;
                 progress.Report((val, $"Step {i}", $"Test message {i}"));
 
                 //long operation
