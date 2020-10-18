@@ -28,14 +28,14 @@ namespace BlazorNotifier.Classes.Base
         public void AddMessage(BlazorNotifierMessage message)
         {
             Messages.Add(message);
-            OnChange?.Invoke();
+            Change();
             OnAddNewMessage?.Invoke(message);
         }
 
         public void RemoveMessage(BlazorNotifierMessage message)
         {
             Messages.Remove(message);
-            OnChange?.Invoke();
+            Change();  
             OnRemoveMessage?.Invoke(message);
         }
 
@@ -44,8 +44,7 @@ namespace BlazorNotifier.Classes.Base
             var message = Messages.FirstOrDefault(m => m.Id == id);
             if (message is null)
             {
-                Console.WriteLine($"NOT FIND {id}");
-                OnChange?.Invoke();
+                Change();
                 return;
             }
             RemoveMessage(message);
@@ -54,7 +53,7 @@ namespace BlazorNotifier.Classes.Base
         public void ClearMessages()
         { 
             Messages.Clear();
-            OnChange?.Invoke();
+            Change();
         }
 
         #endregion
@@ -63,7 +62,7 @@ namespace BlazorNotifier.Classes.Base
         public void AddProgress(BlazorNotifierProgressMessage progress)
         {
             Progress.Add(progress);
-            OnChange?.Invoke();
+            Change();
             OnAddNewProgress?.Invoke(progress);
 
         }
@@ -71,7 +70,7 @@ namespace BlazorNotifier.Classes.Base
         public void RemoveProgress(BlazorNotifierProgressMessage progress)
         {
             Progress.Remove(progress);
-            OnChange?.Invoke();
+            Change();
             OnRemoveProgress?.Invoke(progress);
         } 
         public void RemoveProgress(Guid id)
@@ -80,16 +79,22 @@ namespace BlazorNotifier.Classes.Base
             if (progress is null)
             {
                 Console.WriteLine($"NOT FIND {id}");
-                OnChange?.Invoke();
+                Change();
                 return;
             }
             RemoveProgress(progress);
+        }
+
+        public bool ContainsProgress(Guid id)
+        {
+            var progress = Progress.FirstOrDefault(m => m.Id == id);
+            return !(progress is null);
         }
         public void UpdateProgress(BlazorNotifierProgressMessage progress)
         {
             var current = Progress.FirstOrDefault(m => m.Id == progress.Id);
             current?.Update(progress);
-            OnChange?.Invoke();
+            Change();
             OnUpdateProgress?.Invoke(progress);
         }
 

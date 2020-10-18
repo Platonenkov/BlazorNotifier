@@ -6,25 +6,14 @@
 {
     <p>@Notifi.CountOfNotifications</p>
     <div class="notification-area">
-        @foreach (var message in Notifi.Notification.Progress)
+        @foreach (var progress in Notifi.Notification.Progress)
         {
-            <p>@message.Percent</p>
-            <BlazorNotifier.Components.NotifierProgress Id="@message.Id" Title="@message.Title" Message="@message.Message" />
-
+            <BlazorNotifier.Components.NotifierProgress Progress="@progress" OnClose="@(()=>Notifi.CloseProgress(progress.Id))"/>
         }
         @foreach (var message in Notifi.Notification.Messages)
         {
-            <BlazorNotifier.Components.NotifierMessage Id="@message.Id" Title="@message.Title" Type="@message.Type" TimeOut="@message.TimeOut" />
+            <BlazorNotifier.Components.NotifierMessage Message="@message" OnClose="@(()=>Notifi.CloseMessage(message.Id))"/>
         }
     </div>
-
-}
-@code
-{
-    protected override void OnInitialized()
-    {
-        Notifi.OnChange += StateHasChanged;
-    }
-
 
 }

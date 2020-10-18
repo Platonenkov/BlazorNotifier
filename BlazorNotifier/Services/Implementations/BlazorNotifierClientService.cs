@@ -22,6 +22,7 @@ namespace BlazorNotifier.Services.Implementations
         public event Action OnConnectionStatusChange; 
         /// <summary> Событие при изменении статуса подключения </summary>
         private void NotifyChanged() => OnChange?.Invoke();
+
         /// <summary> Событие при изменении статуса подключения </summary>
         private void NotifyConnectionChanged() => OnConnectionStatusChange?.Invoke();
 
@@ -141,6 +142,7 @@ namespace BlazorNotifier.Services.Implementations
         }
 
         private void DoWhenProgressFinish(BlazorNotifierProgressMessage Progress) => Notification.RemoveProgress(Progress.Id);
+        public void CloseProgress(Guid id) => Notification.RemoveProgress(id);
 
         #endregion
 
@@ -153,7 +155,6 @@ namespace BlazorNotifier.Services.Implementations
         private void DoWhenClientGetNewMessage(BlazorNotifierMessage message) => SendNotification(message);
 
         public void CloseMessage(Guid id) => Notification.RemoveMessage(id);
-        public void CloseProgress(Guid id) => Notification.RemoveProgress(id);
 
         #endregion
 
@@ -178,12 +179,33 @@ namespace BlazorNotifier.Services.Implementations
             SendNotification(message);
         }
 
+        public void SendOrUpdateProgress(BlazorNotifierProgressMessage progress)
+        {
+            if (Notification.ContainsProgress(progress.Id))
+            {
+                Notification.UpdateProgress(progress);
+                NotifyChanged();
+            }
+            else
+            {
+                Notification.AddProgress(progress);
+                LogNotification(new BlazorNotifierMessage
+                {
+                    Title = $"{progress.Title}: {progress.Message}",
+                    Time = progress.Time,
+                    Id = progress.Id,
+                    Type = BlazorNotifierType.Progress
+                });
+                NotifyChanged();
+            }
+        }
+
         #endregion
         private void StartNotifierTimer(BlazorNotifierMessage message)
         {
             Task.Run(async () =>
             {
-                await Task.Delay(message.TimeOut * 1000+ 1000);
+                await Task.Delay(message.TimeOut * 1000-1000 );
                 Notification.RemoveMessage(message);
                 NotifyChanged();
             });

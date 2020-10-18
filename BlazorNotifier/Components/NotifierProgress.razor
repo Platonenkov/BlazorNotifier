@@ -1,12 +1,22 @@
-﻿<div id="@Id" class="notification__message message--Warning" @onclick=Click style="@(IsVisible ? "transform: translateX(0%); opacity: 1; visibility: visible;":null)">
-    <span>@Title</span>
-    <div class="progress-message"><span>@Message</span></div>
-    <progress max="100" value="@Percent" >@Percent</progress>
-    <div class="progress">
-        <div class="progress-bar" role="progressbar" style="width: @($"{Percent}%");" aria-valuemin="0" aria-valuemax="100">@($"{Percent}%")</div>
+﻿<div id="@Progress.Id" class="notification__message message--Progress"
+     @onclick=Click style="@(IsVisible ? "transform: translateX(0%); opacity: 1; visibility: visible;":null)">
+    <div min-height="100px">
+        <span>@Progress.Title</span>
+        <div class="progress-message">@Progress.Message</div>
+        @if (Progress.Percent is null)
+        {
+            <div class="progress-indeterminate">
+            </div>
+        }
+        else
+        {
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" style="width: @($"{Progress.Percent}%");" aria-valuemin="0" aria-valuemax="100">@($"{Progress.Percent}%")</div>
+            </div>
+        }
     </div>
-    <button aria-labelledby="button-dismiss-@Id" @onclick="Close">
-        <span id="button-dismiss-@Id" hidden> Dismiss</span >
+    <button aria-labelledby="button-dismiss-@Progress.Id" @onclick="Close">
+        <span id="button-dismiss-@Progress.Id" hidden> Dismiss</span >
         <svg viewBox="0 0 100 100" width="10" height="10">
             <g stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none">
                 <g transform="translate(50 50) rotate(45)"><path d="M 0 -30 v 60 z M -30 0 h 60"></path></g>
