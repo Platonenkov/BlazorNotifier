@@ -146,3 +146,27 @@ just call to api service
 Notifier.SendNotification("Console Debug Test", BlazorNotifierType.Debug);
 ```
 Сообщение отобразится в консоли
+
+### Send Progress
+On Server 
+```C#
+         [HttpGet("GetSomeData/{UserId}")]
+        public async Task<IActionResult> GetSomeData(string UserId)
+        {
+            using var progress = new BlazorNotifierProgress(UserId, _Notification);
+
+            var count = 10;
+            for (var i = 1; i <= count; i++)
+            {
+                var val = i % 4 == 0 ? (int?)null : i * 100 / count;
+                progress.Report((val, $"Step {i}", $"Test message {i}"));
+
+                //long operation
+                await Task.Delay(1000);
+            }
+
+            return Ok();
+        }
+```
+it use IProgress<(int? Percent, string Title, string Message)>
+
