@@ -7,6 +7,7 @@
         Success,
         Info,
         Warning,
-        Error
+        Error,
+        Progress
     }
 }

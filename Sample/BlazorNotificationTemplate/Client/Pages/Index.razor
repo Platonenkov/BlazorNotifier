@@ -1,14 +1,23 @@
 ﻿@page "/"
 @using BlazorNotifier.Services.Implementations
 @using BlazorNotifier.Services
+@using BlazorNotifier.Classes
 @inject HttpClient client
 @inject BlazorNotifierClientService NotifiService
 
-<button class="btn btn-info" @onclick="StartTest">Start Test</button>
-@foreach (var messsage in NotifiService.Notifications)
-{
-    <p>@messsage.Id    |   @messsage.Title</p>
-}
+<div style="height: 300px; display: flex; flex-direction: column; justify-content: space-between;">
+    <button class="btn btn-info" @onclick="StartTest">Start Test</button>
+    <br/>
+    <button class="btn btn-info" @onclick="ShowNotification">Message</button>
+    <br/>
+    <div class="row" style="width: 400px; display: flex; justify-content: space-between " >
+        <button class="btn btn-info" @onclick="ShowProgress">Progress</button>
+        <button class="btn btn-info" @onclick="UpdatePlus">+</button>
+        <button class="btn btn-info" @onclick="UpdateMinus">-</button>
+        <button class="btn btn-info" @onclick="UpdateNull">determinate</button>
+        <button class="btn btn-info" @onclick="()=> CloseProgress(progress.Id)">close</button>
+    </div>
+</div>
 @code{
     async Task StartTest()
     {
@@ -22,11 +31,61 @@
     }
     protected override void OnInitialized()
     {
-        NotifiService.OnProgressChange += StateHasChanged;
         NotifiService.OnChange += StateHasChanged;
-        NotifiService.Notifications.CollectionChanged += (Sender, Args) => StateHasChanged();
-        NotifiService.ProgressMessages.CollectionChanged += (Sender, Args) => StateHasChanged();
     }
 
+    int counter = 1;
+    async Task ShowNotification()
+    {
+        var message = new BlazorNotifierMessage() {Title = $"message {counter++}"};
 
+        NotifiService.SendNotification(message);
+
+        await InvokeAsync(StateHasChanged);
+    }
+
+    BlazorNotifierProgressMessage progress;
+    private int? _Percent;
+    public int? Percent { get => _Percent ; private set => _Percent = value; }
+
+    async Task ShowProgress()
+    {
+        progress = new BlazorNotifierProgressMessage {Message = "Test message", Title = "Progress", Percent = Percent };
+
+        NotifiService.SendOrUpdateProgress(progress);
+
+        await InvokeAsync(StateHasChanged);
+    }
+
+    async Task UpdatePlus()
+    {
+        Percent ??= 0;
+        var value = Percent++;
+        progress.Percent = value;
+        NotifiService.SendOrUpdateProgress(progress);
+        await InvokeAsync(StateHasChanged);
+    }
+    async Task UpdateMinus()
+    {
+        Percent ??= 0;
+        if(Percent < 0) Percent = 0;
+        var value = Percent--;
+        progress.Percent = value;
+        NotifiService.SendOrUpdateProgress(progress);
+        await InvokeAsync(StateHasChanged);
+    }
+    async Task UpdateNull()
+    {
+        Percent = null;
+        var value = Percent;
+        progress.Percent = value;
+        NotifiService.SendOrUpdateProgress(progress);
+        await InvokeAsync(StateHasChanged);
+    }
+
+    async Task CloseProgress(Guid id)
+    {
+        NotifiService.CloseProgress(id);
+        await InvokeAsync(StateHasChanged);
+    }
 }

@@ -1,32 +1,15 @@
-﻿@using System.Collections.Specialized
-@using BlazorNotifier.Classes
-@using System.Collections.ObjectModel
-@inject BlazorNotifierClientService Notifi
-@if (Notifi.Notifications.Count > 0 || Notifi.ProgressMessages.Count > 0)
+﻿@inject BlazorNotifierClientService Notifi
+@if (Notifi.CountOfNotifications > 0)
 {
-    <p>@Notifi.Notifications.Count</p>
     <div class="notification-area">
-        @foreach (var message in Notifi.ProgressMessages)
+        @foreach (var progress in Notifi.Notification.Progress)
         {
-            <BlazorNotifier.Components.NotifierProgress Id="@message.Id" Title="@message.Title" Message="@message.Message" OnClose="@Notifi.CloseProgress" />
-
+            <BlazorNotifier.Components.NotifierProgress Progress="@progress" OnClose="@(() => Notifi.CloseProgress(progress.Id))"/>
         }
-        @foreach (var message in Notifi.Notifications)
+        @foreach (var message in Notifi.Notification.Messages)
         {
-            <BlazorNotifier.Components.NotifierMessage Id="@message.Id" Title="@message.Title" Type="@message.Type" TimeOut="@message.TimeOut" OnClose="@Notifi.CloseMessage"/>
+            <BlazorNotifier.Components.NotifierMessage Message="@message" OnClose="@(() => Notifi.CloseMessage(message.Id))"/>
         }
     </div>
-
-}
-@code
-{
-    protected override void OnInitialized()
-    {
-        Notifi.OnProgressChange += StateHasChanged;
-        Notifi.OnChange += StateHasChanged;
-        Notifi.Notifications.CollectionChanged += (Sender, Args) => StateHasChanged();
-        Notifi.ProgressMessages.CollectionChanged += (Sender, Args) => StateHasChanged();
-    }
-
 
 }

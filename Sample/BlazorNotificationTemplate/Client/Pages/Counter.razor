@@ -14,6 +14,6 @@
     private void IncrementCount()
     {
         currentCount++;
-        Notifi.Notifications.Add(new BlazorNotifierMessage{Time = DateTime.Now, Title = $"user click on counter, counter = {currentCount}", Type = BlazorNotifierType.Info});
+        Notifi.SendNotification(new BlazorNotifierMessage{Time = DateTime.Now, Title = $"user click on counter, counter = {currentCount}", Type = BlazorNotifierType.Info});
     }
 }

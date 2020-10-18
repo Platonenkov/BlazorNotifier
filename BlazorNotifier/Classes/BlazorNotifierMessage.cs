@@ -6,8 +6,6 @@ namespace BlazorNotifier.Classes
 {
     public class BlazorNotifierMessage : BlazorNotifierBaseMessage
     {
-        /// <summary> время создания сообщения </summary>
-        public DateTime Time { get; set; } = DateTime.Now;
         /// <summary> Тип сообщения </summary>
         public BlazorNotifierType Type { get; set; } = BlazorNotifierType.none;
         /// <summary> Приватное или всем пользователям </summary>

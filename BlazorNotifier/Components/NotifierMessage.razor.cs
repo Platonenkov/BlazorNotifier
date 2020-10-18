@@ -6,40 +6,30 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using BlazorNotifier.Classes;
+using BlazorNotifier.Services.Implementations;
 using Microsoft.AspNetCore.Components;
 using Timer = System.Timers.Timer;
 
 namespace BlazorNotifier.Components
 {
-    public partial class NotifierMessage : ComponentBase
+    public partial class NotifierMessage
     {
-        private string MStyle { get; set; }
 
         [Parameter]
-        public Guid Id { get; set; }
-        [Parameter]
-        public int TimeOut { get; set; }
-        [Parameter]
-        public string Title { get; set; }
-        [Parameter]
-        public BlazorNotifierType Type { get; set; }
+        public BlazorNotifierMessage Message { get; set; }
         [Parameter]
         public EventCallback<Guid> OnClick { get; set; }
         [Parameter]
         public EventCallback<Guid> OnClose { get; set; }
-        void Click() => OnClick.InvokeAsync(Id);
+        void Click() => OnClick.InvokeAsync(Message.Id);
 
         void Close()
         {
-            IsVisible = false;
-            Task.Run(async 
-                () =>
-                {
-                    await Task.Delay(100);
-                    await OnClose.InvokeAsync(Id);
-                    StateHasChanged();
-
-                });
+            Task.Delay(0).ContinueWith(r =>
+            {
+                IsVisible = false;
+                OnClose.InvokeAsync(Message.Id);
+            });
         }
 
         private bool _IsVisible;
@@ -55,13 +45,8 @@ namespace BlazorNotifier.Components
 
         protected override void OnInitialized()
         {
-            IsVisible = true;
-            Task.Run(async 
-                () =>
-                {
-                    await Task.Delay(TimeSpan.FromSeconds(TimeOut));
-                    Close();
-                });
+            Task.Delay(10).ContinueWith(r => IsVisible = true);
+            Task.Delay(Message.TimeOut * 1000).ContinueWith(r => InvokeAsync(Close));
         }
 
     }

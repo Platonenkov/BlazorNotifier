@@ -4,38 +4,28 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
+using BlazorNotifier.Classes;
 using Microsoft.AspNetCore.Components;
 
 namespace BlazorNotifier.Components
 {
-    public partial class NotifierProgress:ComponentBase
+    public partial class NotifierProgress
     {
-        private string MStyle { get; set; }
         [Parameter]
-        public Guid Id { get; set; }
+        public BlazorNotifierProgressMessage Progress { get; set; }
         [Parameter]
-        public string Title { get; set; }
+        public EventCallback<BlazorNotifierProgressMessage> OnClick { get; set; }
         [Parameter]
-        public string Message { get; set; }
-        [Parameter]
-        public int? Percent { get; set; }
-        [Parameter]
-        public EventCallback<Guid> OnClick { get; set; }
-        [Parameter]
-        public EventCallback<Guid> OnClose { get; set; }
+        public EventCallback<BlazorNotifierProgressMessage> OnClose { get; set; }
 
-        void Click() => OnClick.InvokeAsync(Id);
+        void Click() => OnClick.InvokeAsync(Progress);
 
         void Close()
         {
-            IsVisible = false;
-            Task.Run(async
-                () =>
+            Task.Delay(0).ContinueWith(r =>
             {
-                await Task.Delay(100);
-                await OnClose.InvokeAsync(Id);
-                StateHasChanged();
-
+                IsVisible = false;
+                OnClose.InvokeAsync(Progress);
             });
         }
 
@@ -49,6 +39,6 @@ namespace BlazorNotifier.Components
                 StateHasChanged();
             }
         }
-
+        protected override void OnInitialized() => Task.Delay(10).ContinueWith(r => IsVisible = true);
     }
 }
