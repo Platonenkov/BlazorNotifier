@@ -53,12 +53,18 @@ Install-Package BlazorNotifier -Version 2.0.0
  ```C#
              builder.Services.AddScoped<BlazorNotifierClientService>();
  ```
-### 8 Edit MainLayout
-add Notifier section
+### 8 Edit MainLayout and Index.html on client
+add Notifier section in MainLayout
 ```C#
         <BlazorNotifier.Components.NotifierArea />
 ```
+add if you want <BlazorNotifier.Components.NotifierRouter/>
 use it to see api-connection status
+
+in Index.html add
+```html
+ <link rel="stylesheet" href="_content/BlazorNotifier/css/NotifierStyles.css">
+```
 
 ### 9 Add LogSection if you want or create new
 sample
