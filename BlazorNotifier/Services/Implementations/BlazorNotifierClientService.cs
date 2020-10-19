@@ -35,7 +35,7 @@ namespace BlazorNotifier.Services.Implementations
         }
         #region Notification
         /// <summary> Словарь событий время/сообщение </summary>
-        public Dictionary<Guid, (DateTime date,string message)> Events = new Dictionary<Guid, (DateTime date, string message)>();
+        public Dictionary<DateTime, BlazorNotifierMessage> Events = new Dictionary<DateTime, BlazorNotifierMessage>();
         /// <summary> адрес сервиса api </summary>
         string Url = "https://localhost:44303/notificationhub";
         /// <summary> Коллекция уведомительных сообщений </summary>
@@ -103,6 +103,7 @@ namespace BlazorNotifier.Services.Implementations
             _Connection.Closed += OnConnectionClosed;
             //выполняем при получении сообщений клиентом
             _Connection.On<BlazorNotifierMessage>("notification", DoWhenClientGetNewMessage);
+            _Connection.On<BlazorNotifierMessage>("Log", DoWhenGetLogMessage);
             _Connection.On<BlazorNotifierProgressMessage>("ProgressFinish", DoWhenProgressFinish);
             _Connection.On<BlazorNotifierProgressMessage>("ProgressUpdate", DoWhenProgressUpdate);
             _Connection.On<BlazorNotifierProgressMessage>("ProgressStart", DoWhenProgressStart);
@@ -126,7 +127,7 @@ namespace BlazorNotifier.Services.Implementations
         /// <param name="message">сообщение</param>
         void LogNotification(BlazorNotifierMessage message)
         {
-            Events.Add(message.Id,(message.Time, $"{message.Type} - {message.Title}"));
+            Events.Add(DateTime.Now, message);
             NotifyChanged();
         }
 
@@ -153,6 +154,7 @@ namespace BlazorNotifier.Services.Implementations
         /// </summary>
         /// <param name="message">сообщение</param>
         private void DoWhenClientGetNewMessage(BlazorNotifierMessage message) => SendNotification(message);
+        private void DoWhenGetLogMessage(BlazorNotifierMessage message) => LogNotification(message);
 
         public void CloseMessage(Guid id) => Notification.RemoveMessage(id);
 

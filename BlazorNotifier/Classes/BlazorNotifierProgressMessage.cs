@@ -21,12 +21,14 @@ namespace BlazorNotifier.Classes
         {
             
         }
-        public void Update(BlazorNotifierProgressMessage Message)
+        public void Update(BlazorNotifierProgressMessage message)
         {
-            Id = Message.Id;
-            Title = Message.Title;
-            this.Message = Message.Message;
-            Percent = Message.Percent;
+            Id = message.Id;
+            if(!string.IsNullOrWhiteSpace(message.Title))
+                Title = message.Title;
+            if (!string.IsNullOrWhiteSpace(message.Message))
+                Message = message.Message;
+            Percent = message.Percent;
         }
 
     }

@@ -31,6 +31,19 @@ namespace BlazorNotifier.Services.Implementations
                 return false;
             }
         }
+        public async Task<bool> SendLogAsync(BlazorNotifierMessage message)
+        {
+            try
+            {
+                using var response = await new HttpClient().PostAsJsonAsync("https://localhost:44303/api/notifications/Log", message);
+                return response.IsSuccessStatusCode;
+            }
+            catch (Exception e)
+            {
+                _Logger.LogError("Ошибка отправки сообщения на сервер: {error}", e.Message);
+                return false;
+            }
+        }
         public async Task<bool> SendNotificationAsync(string Title)
         {
             try

@@ -111,5 +111,31 @@ namespace BlazorNotifier.Controllers
             }
 
         }
+        /// <summary>
+        /// Получает информационное сообщение и рассылает его пользователям
+        /// </summary>
+        /// <param name="message">сообщение</param>
+        /// <returns></returns>
+        [HttpPost("Log")]
+        public async Task<IActionResult> SendLog(BlazorNotifierMessage message)
+        {
+            try
+            {
+                var id = message.FromUserId;
+                message.FromUserId = string.Empty;
+
+                if (message.IsPrivate)
+                    await _HubContext.Clients.Client(id).SendAsync("Log", message);
+                else
+                    await _HubContext.Clients.All.SendAsync("Log", message);
+
+                return Ok("Notification has been sent succesfully!");
+            }
+            catch (Exception e)
+            {
+                return BadRequest($"Error to send notification: {e.Message}");
+            }
+
+        }
     }
 }
