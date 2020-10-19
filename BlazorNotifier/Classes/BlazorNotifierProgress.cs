@@ -37,8 +37,8 @@ namespace BlazorNotifier.Classes
         {
             if (IsFirstMessage)
             {
-                await _Service.AddNewProgress(new BlazorNotifierProgressMessage(ProgressID, value.Title, value.Message, value.percent, UserId));
                 IsFirstMessage = false;
+                await _Service.AddNewProgress(new BlazorNotifierProgressMessage(ProgressID, value.Title, value.Message, value.percent, UserId));
             }
             await _Service.UpdateProgress(new BlazorNotifierProgressMessage(ProgressID, value.Title, value.Message, value.percent, UserId));
             base.OnReport(value);
