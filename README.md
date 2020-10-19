@@ -82,9 +82,9 @@ sample
 @inject BlazorNotifierClientService NotifiService
 
 <div style="padding: 10px 10px 10px 10px;line-height: 0.5">
-    @foreach (var (_, (date, message)) in Notifi.Events.OrderByDescending(i => i.Value.date))
+@foreach (var e in Notifi.Events.OrderByDescending(i => i.Key))
     {
-        <p >@date : @message</p>
+        <p >@e.Key : @e.Value.Type - @e.Value.Title</p>
     }
 
 </div>
@@ -99,10 +99,7 @@ sample
 ```
 
 you can take
-Notifi.events to show id -> key, and (date, message)
-
-ore 
-notification.Messages - > collection of BlazorNotifierMessage
+Notifi.events to show Time -> key, and message
 
 ### 11 Add Service to Server
 ```C#
