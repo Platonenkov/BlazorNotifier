@@ -10,8 +10,9 @@
         }
         else
         {
-            <div class="progress">
-                <div class="progress-bar" role="progressbar" style="width: @($"{Progress.Percent}%");" aria-valuemin="0" aria-valuemax="100">@($"{Progress.Percent}%")</div>
+            <div class="progress" style="position:relative;">
+                <div class="progress-indeterminate" style="width: 100%; opacity:0.2"></div>
+                <div class="progress-bar" role="progressbar" style="width: @($"{Progress.Percent}%; position: absolute");" aria-valuemin="0" aria-valuemax="100">@($"{Progress.Percent}%")</div>
             </div>
         }
     </div>
@@ -24,6 +25,3 @@
         </svg>
     </button >
 </div>
-@code
-{
-}

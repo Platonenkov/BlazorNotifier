@@ -125,7 +125,7 @@ namespace BlazorNotifier.Services.Implementations
 
         /// <summary> Запись событий </summary>
         /// <param name="message">сообщение</param>
-        void LogNotification(BlazorNotifierMessage message)
+        public void LogNotification(BlazorNotifierMessage message)
         {
             Events.Add(DateTime.Now, message);
             NotifyChanged();

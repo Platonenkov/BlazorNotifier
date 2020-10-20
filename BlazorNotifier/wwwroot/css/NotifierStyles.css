@@ -236,7 +236,6 @@
 
 .progress-indeterminate {
     height: 16px;
-    border-radius: .25rem;
     position: relative;
     overflow: hidden;
     background: #E6E6E6;
