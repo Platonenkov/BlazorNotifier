@@ -118,6 +118,7 @@ namespace BlazorNotifier.Services.Implementations
         {
             IsConnected = false;
             ConnectionStatus = "Disconnected";
+            Notification.ClearProgress();
             await _Connection.StartAsync();
             IsConnected = true;
             ConnectionStatus = "Connected";
