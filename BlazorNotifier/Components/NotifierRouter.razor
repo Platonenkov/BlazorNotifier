@@ -1,7 +1,7 @@
 ﻿@inject BlazorNotifierClientService Notifi
 <div class="row">
         <p style="margin-right: 10px">Notifier connection Status: @Notifi.ConnectionStatus </p>
-        <div @bind-style="Notifi.StatusColor" @bind-style:event="oninput"></div>
+        <div @bind-style="Notifi.StatusStyle" @bind-style:event="oninput"></div>
 </div>
 @code
 {

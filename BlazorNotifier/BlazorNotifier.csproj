@@ -13,9 +13,9 @@
     <PackageTags>Blazor, Notification, Message, Toast, Progress, progress-bar</PackageTags>
     <PackageReleaseNotes>add standard progress&lt;T&gt; with service</PackageReleaseNotes>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <AssemblyVersion>2.0.2.0</AssemblyVersion>
-    <FileVersion>2.0.2.0</FileVersion>
-    <Version>2.0.2</Version>
+    <AssemblyVersion>2.0.2.1</AssemblyVersion>
+    <FileVersion>2.0.2.1</FileVersion>
+    <Version>2.0.2.1</Version>
     <PackageLicenseExpression></PackageLicenseExpression>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>

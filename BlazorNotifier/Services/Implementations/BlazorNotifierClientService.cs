@@ -46,10 +46,16 @@ namespace BlazorNotifier.Services.Implementations
         HubConnection _Connection = null;
         /// <summary> Id клиента для отправки сообщений </summary>
         public string UserId => _Connection.ConnectionId;
-        /// <summary> стиль статуса подключения к сервису </summary>
+
 
         #region Состояния подключения к сервису
-        public string StatusColor { get; set; } = "background-color: red; width: 20px; height: 20px; border-radius: 50%";
+
+        /// <summary> стиль статуса при подключенном состоянии </summary>
+        public static string StatusStyleOnOpen { get; set; } = "background-color: green; width: 20px; height: 20px; border-radius: 50%";
+        /// <summary> стиль статуса при отсутствии соединения </summary>
+        public static string StatusStyleOnClose { get; set; } = "background-color: red; width: 20px; height: 20px; border-radius: 50%";
+        /// <summary> стиль статуса подключения к сервису </summary>
+        public string StatusStyle { get; set; } = StatusStyleOnClose;
 
         private bool _IsConnected;
         /// <summary> состояния подключения к сервису </summary>
@@ -59,7 +65,7 @@ namespace BlazorNotifier.Services.Implementations
             set
             {
                 _IsConnected = value;
-                StatusColor = value ? "background-color: green; width: 20px; height: 20px; border-radius: 50%" : "background-color: red; width: 20px; height: 20px; border-radius: 50%";
+                StatusStyle = value ? StatusStyleOnOpen : StatusStyleOnClose;
                 NotifyConnectionChanged();
                 NotifyChanged();
             }
@@ -143,7 +149,35 @@ namespace BlazorNotifier.Services.Implementations
         }
 
         private void DoWhenProgressFinish(BlazorNotifierProgressMessage Progress) => Notification.RemoveProgress(Progress.Id);
+        /// <summary>
+        /// Закрыть прогресс бар
+        /// </summary>
+        /// <param name="id">id окна</param>
         public void CloseProgress(Guid id) => Notification.RemoveProgress(id);
+        /// <summary>
+        /// показать прогресс или обновить данные
+        /// </summary>
+        /// <param name="progress">прогресс</param>
+        public void SendOrUpdateProgress(BlazorNotifierProgressMessage progress)
+        {
+            if (Notification.ContainsProgress(progress.Id))
+            {
+                Notification.UpdateProgress(progress);
+                NotifyChanged();
+            }
+            else
+            {
+                Notification.AddProgress(progress);
+                LogNotification(new BlazorNotifierMessage
+                {
+                    Title = $"{progress.Title}: {progress.Message}",
+                    Time = progress.Time,
+                    Id = progress.Id,
+                    Type = BlazorNotifierType.Progress
+                });
+                NotifyChanged();
+            }
+        }
 
         #endregion
 
@@ -155,8 +189,36 @@ namespace BlazorNotifier.Services.Implementations
         /// <param name="message">сообщение</param>
         private void DoWhenClientGetNewMessage(BlazorNotifierMessage message) => SendNotification(message);
         private void DoWhenGetLogMessage(BlazorNotifierMessage message) => LogNotification(message);
-
+        /// <summary>
+        /// закрыть сообщение
+        /// </summary>
+        /// <param name="id">id сообщения</param>
         public void CloseMessage(Guid id) => Notification.RemoveMessage(id);
+        /// <summary>
+        /// показать сообщение
+        /// </summary>
+        /// <param name="message">сообщение</param>
+        public void SendNotification(BlazorNotifierMessage message)
+        {
+            Notification.AddMessage(message);
+            LogNotification(message);
+        }
+        /// <summary>
+        /// показать сообщение
+        /// </summary>
+        /// <param name="text">сообщение</param>
+        /// <param name="type">тип</param>
+        public void SendNotification(string text, BlazorNotifierType type = BlazorNotifierType.Info)
+        {
+            if (type == BlazorNotifierType.Debug)
+            {
+                Console.WriteLine($"Debug: {text}");
+                return;
+            }
+
+            var message = new BlazorNotifierMessage { Title = text, Type = type };
+            SendNotification(message);
+        }
 
         #endregion
 
@@ -187,47 +249,6 @@ namespace BlazorNotifier.Services.Implementations
 
         #endregion
 
-        #region Уведомления на клиенте
-
-        public void SendNotification(BlazorNotifierMessage message)
-        {
-            Notification.AddMessage(message);
-            LogNotification(message);
-        }
-        public void SendNotification(string text, BlazorNotifierType type = BlazorNotifierType.Info)
-        {
-            if (type == BlazorNotifierType.Debug)
-            {
-                Console.WriteLine($"Debug: {text}");
-                return;
-            }
-
-            var message = new BlazorNotifierMessage {Title = text, Type = type};
-            SendNotification(message);
-        }
-
-        public void SendOrUpdateProgress(BlazorNotifierProgressMessage progress)
-        {
-            if (Notification.ContainsProgress(progress.Id))
-            {
-                Notification.UpdateProgress(progress);
-                NotifyChanged();
-            }
-            else
-            {
-                Notification.AddProgress(progress);
-                LogNotification(new BlazorNotifierMessage
-                {
-                    Title = $"{progress.Title}: {progress.Message}",
-                    Time = progress.Time,
-                    Id = progress.Id,
-                    Type = BlazorNotifierType.Progress
-                });
-                NotifyChanged();
-            }
-        }
-
-        #endregion
 
         /// <summary>
         /// Удаляем сообщение из сервиса по окончанию таймера
