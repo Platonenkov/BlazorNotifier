@@ -124,6 +124,44 @@ namespace BlazorNotifier.Services.Implementations
             ConnectionStatus = "Connected";
         }
 
+        #endregion
+
+        #region PROGRESS
+
+        private void DoWhenProgressUpdate(BlazorNotifierProgressMessage Message) => Notification.UpdateProgress(Message);
+
+        private void DoWhenProgressStart(BlazorNotifierProgressMessage Progress)
+        {
+            Notification.AddProgress(Progress);
+            LogNotification(new BlazorNotifierMessage
+            {
+                Title = $"{Progress.Title}: {Progress.Message}",
+                Time = Progress.Time,
+                Id = Progress.Id,
+                Type = BlazorNotifierType.Progress
+            });
+        }
+
+        private void DoWhenProgressFinish(BlazorNotifierProgressMessage Progress) => Notification.RemoveProgress(Progress.Id);
+        public void CloseProgress(Guid id) => Notification.RemoveProgress(id);
+
+        #endregion
+
+        #region Messages
+
+        /// <summary>
+        /// Выполняем при получении сообщений клиентом
+        /// </summary>
+        /// <param name="message">сообщение</param>
+        private void DoWhenClientGetNewMessage(BlazorNotifierMessage message) => SendNotification(message);
+        private void DoWhenGetLogMessage(BlazorNotifierMessage message) => LogNotification(message);
+
+        public void CloseMessage(Guid id) => Notification.RemoveMessage(id);
+
+        #endregion
+
+        #region Log
+
         /// <summary> Запись событий </summary>
         /// <param name="message">сообщение</param>
         public void LogNotification(BlazorNotifierMessage message)
@@ -146,34 +184,6 @@ namespace BlazorNotifier.Services.Implementations
             LogNotification(message);
         }
 
-        #region PROGRESS
-
-        private void DoWhenProgressUpdate(BlazorNotifierProgressMessage Message) => Notification.UpdateProgress(Message);
-
-        private void DoWhenProgressStart(BlazorNotifierProgressMessage Progress)
-        {
-            Notification.AddProgress(Progress);
-            LogNotification(new BlazorNotifierMessage { Title = $"{Progress.Title}: {Progress.Message}", Time = Progress.Time, 
-                Id = Progress.Id, Type = BlazorNotifierType.Progress });
-        }
-
-        private void DoWhenProgressFinish(BlazorNotifierProgressMessage Progress) => Notification.RemoveProgress(Progress.Id);
-        public void CloseProgress(Guid id) => Notification.RemoveProgress(id);
-
-        #endregion
-
-        #region Messages
-
-        /// <summary>
-        /// Выполняем при получении сообщений клиентом
-        /// </summary>
-        /// <param name="message">сообщение</param>
-        private void DoWhenClientGetNewMessage(BlazorNotifierMessage message) => SendNotification(message);
-        private void DoWhenGetLogMessage(BlazorNotifierMessage message) => LogNotification(message);
-
-        public void CloseMessage(Guid id) => Notification.RemoveMessage(id);
-
-        #endregion
 
         #endregion
 
@@ -218,11 +228,16 @@ namespace BlazorNotifier.Services.Implementations
         }
 
         #endregion
+
+        /// <summary>
+        /// Удаляем сообщение из сервиса по окончанию таймера
+        /// </summary>
+        /// <param name="message">сообщения</param>
         private void StartNotifierTimer(BlazorNotifierMessage message)
         {
             Task.Run(async () =>
             {
-                await Task.Delay(message.TimeOut * 1000 );
+                await Task.Delay(message.TimeOut * 1000-1000 );
                 Notification.RemoveMessage(message);
                 NotifyChanged();
             });

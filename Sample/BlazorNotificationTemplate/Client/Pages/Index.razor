@@ -96,7 +96,7 @@
     async Task TestClientProgress()
     {
 
-        using var progress = new BlazorNotifierProgressClient(NotifiService);
+        using var progress = new BlazorNotifierProgress(NotifiService);
 
         await SomeMethod(progress);
 

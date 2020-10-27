@@ -28,7 +28,7 @@ namespace BlazorNotificationTemplate.Server.Controllers
         public async Task<IActionResult> GetSomeData(string UserId)
         {
             var random = new Random();
-            using var progress = new BlazorNotifierProgressServer(UserId, _Notification);
+            using var progress = new BlazorNotifierProgress(UserId, _Notification);
 
             var count = 10;
             for (var i = 1; i <= count; i++)
