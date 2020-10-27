@@ -1,7 +1,7 @@
 # BlazorNotifier
 Blazor notifier from server to client by SignalR
 
-Install-Package BlazorNotifier -Version 2.0.2.1
+## Install-Package BlazorNotifier -Version 2.0.2.1
 
 ![Demo](https://github.com/Platonenkov/BlazorNotifier/blob/main/Resources/Notifier.gif)
 
@@ -37,7 +37,8 @@ Install-Package BlazorNotifier -Version 2.0.2.1
 | FinishProgress | Сomplete progress on the client | Завершить на клиенте прогресс |
 
 For progress bar you can use IDisposable Progress<(int? percent, string Title,string message)>
-###$ OnCLient
+
+### OnCLient
 ```C#
 using 
 @inject BlazorNotifierClientService NotifiService
