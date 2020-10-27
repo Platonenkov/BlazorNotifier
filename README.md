@@ -5,6 +5,87 @@ Install-Package BlazorNotifier -Version 2.0.2
 
 ![Demo](https://github.com/Platonenkov/BlazorNotifier/blob/main/Resources/Notifier.gif)
 
+## Methods
+### OnClient
+| Properties | Description | Описание |
+|:----------------|:---------|:----------------|
+| Events | Time/Message Event Dictionary | Словарь событий время/сообщение |
+| Notification | Notification Message Collection | Коллекция уведомительных сообщений |
+| CountOfNotifications | Count of visible messages | Количество видимых сообщений |
+| UserId | Client ID for sending messages | Id клиента для отправки сообщений |
+| StatusStyleOnOpen | Status style when connected | Стиль статуса при подключенном состоянии |
+| StatusStyleOnClose |Status style when disconnected | Стиль статуса при отсутствии соединения |
+| StatusStyle | Current Status Style | Текущий стиль статуса по состоянию |
+| IsConnected | Service connection status | Состояние подключения к сервису |
+| ConnectionStatus | Data Link States | Состояния канала передачи данных |
+
+| Method | Description | Описание |
+|:----------------|:---------|:----------------|
+| SendNotification | Show message (2 overloads) | Показать сообщение (2 перегрузки) |
+| CloseMessage | Close the message (forced) | Закрыть сообщение (принудительно) |
+| LogNotification | Write message to log (2 overloads) | Записать сообщение в лог (2 перегрузки) |
+| SendOrUpdateProgress | Show progress bar or update status if already shown | Показать прогресс бар или обновить состояние если уже показан |
+| CloseProgress | Close progress bar (forced) | Закрыть прогресс бар (принудительно) |
+
+### OnServer
+| Method | Description | Описание |
+|:----------------|:---------|:----------------|
+| SendNotificationAsync | Send message to client (2 overloads) | Отправить сообщение клиенту (2 перегрузки) |
+| SendLogAsync | Send log message to client (2 overloads) | Отправить клиенту сообщение в лог (2 перегрузки) |
+| AddNewProgress | Inform the customer of the start of the process | Информировать клиент о начале процесса |
+| UpdateProgress | Update progress status on client | Обновить на клиенте состояние прогресса |
+| FinishProgress | Сomplete progress on the client | Завершить на клиенте прогресс |
+
+For progress bar you can use IDisposable Progress<(int? percent, string Title,string message)>
+###$ OnCLient
+```C#
+using 
+@inject BlazorNotifierClientService NotifiService
+
+    async Task TestClientProgress()
+    {
+
+        using var progress = new BlazorNotifierProgress(NotifiService);
+
+        await SomeMethod(progress);
+
+        progress.Report((null,"Finish","Last method"));
+        await Task.Delay(3000);
+
+    }
+
+    async Task SomeMethod(IProgress<(int?,string, string)> progress)
+    {
+        for (var i = 0; i < 101; i++)
+        {
+            if(i>30 && i <50)
+                progress.Report((null,$"Title {i}", $"intermediate"));
+            else
+                progress.Report((i,$"Title {i}", $"Message {i}"));
+            await Task.Delay(300);
+        }
+            
+
+    }
+```
+
+#### OnServer
+```C#
+    using var progress = new BlazorNotifierProgress(UserId, _Notification);
+
+    var count = 10;
+    for (var i = 1; i <= count; i++)
+    {
+        progress.Report((val,  $"Step {i}", $"Test message {i}"));
+
+        //long operation
+        await Task.Delay(1000);
+    }
+
+```
+
+to set progress bar as intermediate - set percent as null;
+
 ## How Use
 
 ### 1 Create Api project .NET Core 3.1
@@ -131,26 +212,4 @@ Notifier.SendNotification("Console Debug Test", BlazorNotifierType.Debug);
 ```
 Сообщение отобразится в консоли
 
-### Send Progress
-On Server 
-```C#
-         [HttpGet("GetSomeData/{UserId}")]
-        public async Task<IActionResult> GetSomeData(string UserId)
-        {
-            using var progress = new BlazorNotifierProgress(UserId, _Notification);
-
-            var count = 10;
-            for (var i = 1; i <= count; i++)
-            {
-                var val = i % 4 == 0 ? (int?)null : i * 100 / count;
-                progress.Report((val, $"Step {i}", $"Test message {i}"));
-
-                //long operation
-                await Task.Delay(1000);
-            }
-
-            return Ok();
-        }
-```
-it use IProgress<(int? Percent, string Title, string Message)>
 
