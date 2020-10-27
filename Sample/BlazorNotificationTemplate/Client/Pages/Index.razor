@@ -6,16 +6,19 @@
 @inject BlazorNotifierClientService NotifiService
 
 <div style="height: 300px; display: flex; flex-direction: column; justify-content: space-between;">
-    <button class="btn btn-info" @onclick="StartTest">Start Test</button>
+    <button class="btn btn-info" @onclick="StartTest">Start Test from server</button>
     <br/>
     <button class="btn btn-info" @onclick="ShowNotification">Message</button>
     <br/>
     <div class="row" style="width: 400px; display: flex; justify-content: space-between " >
-        <button class="btn btn-info" @onclick="ShowProgress">Progress</button>
-        <button class="btn btn-info" @onclick="UpdatePlus">+</button>
-        <button class="btn btn-info" @onclick="UpdateMinus">-</button>
-        <button class="btn btn-info" @onclick="UpdateNull">determinate</button>
-        <button class="btn btn-info" @onclick="()=> CloseProgress(progress.Id)">close</button>
+        <button class="btn btn-info" @onclick="() => ShowProgress(ServerProgress)">Progress</button>
+        <button class="btn btn-info" @onclick="() => UpdatePlus(ServerProgress)">+</button>
+        <button class="btn btn-info" @onclick="() => UpdateMinus(ServerProgress)">-</button>
+        <button class="btn btn-info" @onclick="() => UpdateNull(ServerProgress)">determinate</button>
+        <button class="btn btn-info" @onclick="() => CloseProgress(ServerProgress.Id)">close</button>
+    </div>
+    <div class="row" style="width: 400px; display: flex; justify-content: space-between " >
+        <button class="btn btn-info" @onclick="TestClientProgress">Client progress bar</button>
     </div>
 </div>
 @code{
@@ -37,27 +40,28 @@
     int counter = 1;
     async Task ShowNotification()
     {
-        var message = new BlazorNotifierMessage() {Title = $"message {counter++}"};
-
-        NotifiService.SendNotification(message);
+        var random = new Random();
+        var type = random.Next(2, 6);
+        NotifiService.SendNotification(new BlazorNotifierMessage { Title = $"{(BlazorNotifierType)type}", Type = (BlazorNotifierType)type });
 
         await InvokeAsync(StateHasChanged);
     }
 
-    BlazorNotifierProgressMessage progress;
+    BlazorNotifierProgressMessage ServerProgress;
+    BlazorNotifierProgressMessage ClientProgress;
     private int? _Percent;
     public int? Percent { get => _Percent ; private set => _Percent = value; }
 
-    async Task ShowProgress()
+    async Task ShowProgress(BlazorNotifierProgressMessage progress)
     {
         progress = new BlazorNotifierProgressMessage {Message = "Test message", Title = "Progress", Percent = Percent };
-
+         
         NotifiService.SendOrUpdateProgress(progress);
 
         await InvokeAsync(StateHasChanged);
     }
 
-    async Task UpdatePlus()
+    async Task UpdatePlus(BlazorNotifierProgressMessage progress)
     {
         Percent ??= 0;
         var value = Percent++;
@@ -65,7 +69,7 @@
         NotifiService.SendOrUpdateProgress(progress);
         await InvokeAsync(StateHasChanged);
     }
-    async Task UpdateMinus()
+    async Task UpdateMinus(BlazorNotifierProgressMessage progress)
     {
         Percent ??= 0;
         if(Percent < 0) Percent = 0;
@@ -74,7 +78,7 @@
         NotifiService.SendOrUpdateProgress(progress);
         await InvokeAsync(StateHasChanged);
     }
-    async Task UpdateNull()
+    async Task UpdateNull(BlazorNotifierProgressMessage progress)
     {
         Percent = null;
         var value = Percent;
@@ -87,5 +91,31 @@
     {
         NotifiService.CloseProgress(id);
         await InvokeAsync(StateHasChanged);
+    }
+
+    async Task TestClientProgress()
+    {
+
+        using var progress = new BlazorNotifierProgressClient(NotifiService);
+
+        await SomeMethod(progress);
+
+        progress.Report((null,"Finish","Last method"));
+        await Task.Delay(3000);
+
+    }
+
+    async Task SomeMethod(IProgress<(int?,string, string)> progress)
+    {
+        for (var i = 0; i < 101; i++)
+        {
+            if(i>30 && i <50)
+                progress.Report((null,$"Title {i}", $"intermediate"));
+            else
+                progress.Report((i,$"Title {i}", $"Message {i}"));
+            await Task.Delay(300);
+        }
+            
+
     }
 }

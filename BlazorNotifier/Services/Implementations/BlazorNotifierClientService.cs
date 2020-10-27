@@ -131,6 +131,20 @@ namespace BlazorNotifier.Services.Implementations
             Events.Add(DateTime.Now, message);
             NotifyChanged();
         }
+        /// <summary> Запись событий </summary>
+        /// <param name="text">сообщение</param>
+        /// <param name="type">тип события</param>
+        public void LogNotification(string text, BlazorNotifierType type = BlazorNotifierType.Info)
+        {
+            if (type == BlazorNotifierType.Debug)
+            {
+                Console.WriteLine($"Debug: {text}");
+                return;
+            }
+
+            var message = new BlazorNotifierMessage { Title = text, Type = type };
+            LogNotification(message);
+        }
 
         #region PROGRESS
 
@@ -208,7 +222,7 @@ namespace BlazorNotifier.Services.Implementations
         {
             Task.Run(async () =>
             {
-                await Task.Delay(message.TimeOut * 1000-1000 );
+                await Task.Delay(message.TimeOut * 1000 );
                 Notification.RemoveMessage(message);
                 NotifyChanged();
             });
