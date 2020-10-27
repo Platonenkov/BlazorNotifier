@@ -34,7 +34,7 @@ namespace BlazorNotificationTemplate.Server.Controllers
             for (var i = 1; i <= count; i++)
             {
                 var type = random.Next(2, 6);
-                await _Notification.SendLogAsync(new BlazorNotifierMessage { Title = $"Step {i}", FromUserId = UserId, Type = (BlazorNotifierType)type });
+                await _Notification.SendNotificationAsync(new BlazorNotifierMessage { Title = $"Step {i}", FromUserId = UserId, Type = (BlazorNotifierType)type });
                 var val = i == 4||i==5||i==6 ? (int?)null : i * 100 / count;
                 progress.Report((val, i>2? null : $"Step {i}", i>5?null: $"Test message {i}"));
 

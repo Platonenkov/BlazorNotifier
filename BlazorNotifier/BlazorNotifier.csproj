@@ -10,12 +10,12 @@
     <Copyright>https://github.com/Platonenkov</Copyright>
     <PackageProjectUrl>https://github.com/Platonenkov/BlazorNotifier</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Platonenkov/BlazorNotifier</RepositoryUrl>
-    <PackageTags>Blazor Notification Message</PackageTags>
-    <PackageReleaseNotes>show indeterminate background for determinate progress</PackageReleaseNotes>
+    <PackageTags>Blazor, Notification, Message, Toast, Progress, progress-bar</PackageTags>
+    <PackageReleaseNotes>add standard progress&lt;T&gt; with service</PackageReleaseNotes>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <AssemblyVersion>2.0.1.3</AssemblyVersion>
-    <FileVersion>2.0.1.3</FileVersion>
-    <Version>2.0.1.3</Version>
+    <AssemblyVersion>2.0.2.0</AssemblyVersion>
+    <FileVersion>2.0.2.0</FileVersion>
+    <Version>2.0.2</Version>
     <PackageLicenseExpression></PackageLicenseExpression>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
