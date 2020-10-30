@@ -11,7 +11,7 @@
     <button class="btn btn-info" @onclick="ShowNotification">Message</button>
     <br/>
     <div class="row" style="width: 400px; display: flex; justify-content: space-between " >
-        <button class="btn btn-info" @onclick="() => ShowProgress(ServerProgress)">Progress</button>
+        <button class="btn btn-info" @onclick="ShowProgress">Progress</button>
         <button class="btn btn-info" @onclick="() => UpdatePlus(ServerProgress)">+</button>
         <button class="btn btn-info" @onclick="() => UpdateMinus(ServerProgress)">-</button>
         <button class="btn btn-info" @onclick="() => UpdateNull(ServerProgress)">determinate</button>
@@ -52,11 +52,11 @@
     private int? _Percent;
     public int? Percent { get => _Percent ; private set => _Percent = value; }
 
-    async Task ShowProgress(BlazorNotifierProgressMessage progress)
+    async Task ShowProgress()
     {
-        progress = new BlazorNotifierProgressMessage {Message = "Test message", Title = "Progress", Percent = Percent };
+        ServerProgress = new BlazorNotifierProgressMessage {Message = "Test message", Title = "Progress", Percent = Percent };
          
-        NotifiService.SendOrUpdateProgress(progress);
+        NotifiService.SendOrUpdateProgress(ServerProgress);
 
         await InvokeAsync(StateHasChanged);
     }
