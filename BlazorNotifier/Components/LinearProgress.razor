@@ -1,0 +1,25 @@
+﻿@using BlazorNotifier.Classes
+<div class="@Style" style="min-height: 60px">
+    <span>@Progress.Title</span>
+    <div class="progress-message">@Progress.Message</div>
+    @if (Progress.Percent is null)
+    {
+        <div class="progress-indeterminate">
+        </div>
+    }
+    else
+    {
+        <div class="progress" style="position:relative;">
+            <div class="progress-indeterminate" style="width: 100%; opacity:0.2"></div>
+            <div class="progress-bar" role="progressbar" style="width: @($"{Progress.Percent}%; position: absolute");" aria-valuemin="0" aria-valuemax="100">@($"{Progress.Percent}%")</div>
+        </div>
+    }
+</div>
+@code
+{
+    [Parameter]
+    public BlazorNotifierProgressMessage Progress { get; set; }
+    [Parameter]
+    public string Style { get; set; }
+
+}

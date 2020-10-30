@@ -72,7 +72,7 @@ namespace BlazorNotifier.Classes.Base
             Progress.Remove(progress);
             Change();
             OnRemoveProgress?.Invoke(progress);
-        } 
+        }
         public void RemoveProgress(Guid id)
         {
             var progress = Progress.FirstOrDefault(m => m.Id == id);

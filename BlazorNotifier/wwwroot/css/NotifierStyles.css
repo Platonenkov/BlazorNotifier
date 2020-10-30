@@ -35,6 +35,7 @@
     overflow-x: hidden;
     /* padding to avoid cropping the box-shadow on the message */
     padding: 0.25rem;
+
 }
 
 /* reduce the size of the icon and give a white fill to the elements of the graphic */
@@ -148,6 +149,8 @@
 /* change the border color according to the different modifiers
 ! for each modifier specify also an svg icon in the background, to highlight the message
 */
+/*#region Messge style*/
+
 .message--Info {
     border-left-color: #90dee9;
     background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle stroke="none" fill="%2390dee9" cx="50" cy="22" r="8"></circle><path fill="none" stroke="%2390dee9" stroke-width="12" stroke-linejoin="round" stroke-linecap="round" d="M 45 40 h 5 v 40 h -5 h 10"></path></svg>'), hsl(0, 0%, 100%);
@@ -192,7 +195,9 @@
     background-position: 100% 100%;
 }
 
-/*indeterminate progress*/
+/*#endregion Messge style*/
+
+/*#region indeterminate progress*/
 
 @-webkit-keyframes greenglow {
     from {
@@ -242,37 +247,115 @@
     margin: 0;
 }
 
-    .progress-indeterminate:after {
-        content: " ";
-        display: block;
-        width: 100px;
-        top: -50%;
-        height: 250%;
-        position: absolute;
-        animation: greenglow 3s linear infinite;
-        -webkit-animation: greenglow 3s linear infinite;
-        z-index: 2;
-        background: #007bff;
-    }
-/*indeterminate progress end*/
-
-#container {
-    min-height: 100vh;
-    position: relative;
-}
-
-#header {
-    padding: 10px;
-}
-
-#body {
-    padding: 10px;
-    padding-bottom: 70px; /* Высота блока "footer" */
-}
-
-#footer {
+.progress-indeterminate:after {
+    content: " ";
+    display: block;
+    width: 100px;
+    top: -50%;
+    height: 250%;
     position: absolute;
-    bottom: 0;
-    width: 100%;
-    height: 200px; /* Высота блока "footer" */
+    animation: greenglow 3s linear infinite;
+    -webkit-animation: greenglow 3s linear infinite;
+    z-index: 2;
+    background: #007bff;
+}
+
+/*#endregion indeterminate progress*/
+
+/*#region radial*/
+@import url(https://fonts.googleapis.com/css?family=Oswald:400|Raleway:400,700,400italic,700italic);
+
+/*** RADIAL PROGRESS ***/
+/* Circumference = 2πr */
+/* π = 3.1415926535898 */
+/* r = 35 */
+svg.radial-progress {
+    height: 7.5em;
+    padding: .8em;
+    transform: rotate(-90deg);
+}
+
+svg.radial-progress circle {
+    fill: rgba(0,0,0,0);
+    stroke: #fff;
+    stroke-dashoffset: 220; /* Circumference */
+    stroke-width: 10;
+}
+
+svg.radial-progress circle.incomplete {
+    opacity: 0.25;
+}
+
+    svg.radial-progress circle.complete {
+        stroke-dasharray: 220; /* Circumference */
+        stroke-dashoffset: 220;
+        transition: 1s;
+    }
+
+    svg.radial-progress text {
+        fill: #1d1f20;
+        font: 400 1em/1 'Oswald', sans-serif;
+        text-anchor: middle;
+    }
+
+    /*** COLORS ***/
+    /* Primary */
+    svg.radial-progress:nth-of-type(6n+1) circle {
+        stroke: #007bff;
+    }
+    /* Secondary */
+    svg.radial-progress:nth-of-type(6n+2) circle {
+        stroke: #83e4e2;
+    }
+    /* Tertiary */
+    svg.radial-progress:nth-of-type(6n+3) circle {
+        stroke: #fd6470;
+    }
+    /* Quaternary */
+    svg.radial-progress:nth-of-type(6n+4) circle {
+        stroke: #fca858;
+    }
+    /* Quinary */
+    svg.radial-progress:nth-of-type(6n+5) circle {
+        stroke: #fddc32;
+    }
+    svg.radial-progress:nth-of-type(6n+6) circle {
+        stroke: #1d1f20;
+    }
+    /*#endregion radial*/
+@keyframes RortateCircle {
+    0% {
+        stroke-dasharray: 10;
+        stroke-dashoffset: 160;
+    }
+
+    100% {
+        stroke-dasharray: 10;
+        stroke-dashoffset: 220;
+    }
+}
+
+.circle-intermediate-rotate {
+    animation: RortateCircle 1s linear infinite;
+    -webkit-animation: RortateCircle 1s linear infinite;
+}
+
+
+@media (max-width: 767.98px) {
+    .small-progress {
+        display: block;
+    }
+
+    .big-progress {
+        display: none
+    }
+}
+@media (min-width: 768px) {
+    .small-progress {
+        display: none;
+    }
+
+    .big-progress {
+        display: block
+    }
 }

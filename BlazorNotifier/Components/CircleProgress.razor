@@ -1,0 +1,20 @@
+﻿@using BlazorNotifier.Classes
+<div class="@Style">
+    <svg class="radial-progress" data-percentage="100" viewBox="0 0 80 80">
+        <circle class="incomplete" cx="40" cy="40" r="35"></circle>
+        <circle class="@(Progress.Percent is null ? "complete circle-intermediate-rotate":"complete")" cx="40" cy="40" r="35" style="stroke-dashoffset: @CirclePercent; stroke-dasharray: @DashArray; transition: 1s;"></circle>
+        <text class="percentage" x="50%" y="57%" transform="matrix(0, 1, -1, 0, 80, 0)"
+              style="@(Progress.Percent is null ? "visibility: collapse;":"visibility: visible")">@($"{Progress.Percent}%")</text>
+    </svg>
+</div>
+@code{
+
+    private int CirclePercent => (int)(220 - ((Progress.Percent ?? 0) * 2.2));
+
+    private int DashArray { get; set; } = 220;
+    [Parameter]
+    public BlazorNotifierProgressMessage Progress { get; set; }
+    [Parameter]
+    public string Style { get; set; }
+
+}

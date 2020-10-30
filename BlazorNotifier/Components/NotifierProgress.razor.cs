@@ -13,6 +13,7 @@ namespace BlazorNotifier.Components
     {
         [Parameter]
         public BlazorNotifierProgressMessage Progress { get; set; }
+        
         [Parameter]
         public EventCallback<BlazorNotifierProgressMessage> OnClick { get; set; }
         [Parameter]
@@ -40,5 +41,6 @@ namespace BlazorNotifier.Components
             }
         }
         protected override void OnInitialized() => Task.Delay(10).ContinueWith(r => IsVisible = true);
+
     }
 }

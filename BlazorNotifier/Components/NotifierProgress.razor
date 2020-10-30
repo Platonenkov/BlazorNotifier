@@ -1,21 +1,8 @@
 ﻿<div id="@Progress.Id" class="notification__message message--Progress"
      @onclick=Click style="@(IsVisible ? "transform: translateX(0%); opacity: 1; visibility: visible;":null)">
-    <div min-height="100px">
-        <span>@Progress.Title</span>
-        <div class="progress-message">@Progress.Message</div>
-        @if (Progress.Percent is null)
-        {
-            <div class="progress-indeterminate">
-            </div>
-        }
-        else
-        {
-            <div class="progress" style="position:relative;">
-                <div class="progress-indeterminate" style="width: 100%; opacity:0.2"></div>
-                <div class="progress-bar" role="progressbar" style="width: @($"{Progress.Percent}%; position: absolute");" aria-valuemin="0" aria-valuemax="100">@($"{Progress.Percent}%")</div>
-            </div>
-        }
-    </div>
+    
+    <CircleProgress Progress="@Progress" Style="@("small-progress")"/>
+    <LinearProgress Progress="@Progress"  Style="@("big-progress")"/>
     <button aria-labelledby="button-dismiss-@Progress.Id" @onclick="Close">
         <span id="button-dismiss-@Progress.Id" hidden> Dismiss</span >
         <svg viewBox="0 0 100 100" width="10" height="10">
