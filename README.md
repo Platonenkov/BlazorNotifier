@@ -3,6 +3,7 @@ Blazor notifier from server to client by SignalR
 
 ## Install-Package BlazorNotifier -Version 5.0.0.0
 Net5 support
+
 ![Demo](https://github.com/Platonenkov/BlazorNotifier/blob/main/Resources/Notifier.gif)
 
 ## Methods
@@ -115,9 +116,9 @@ to set progress bar as intermediate - set percent as null;
     endpoints.MapControllers();
   });
   ```
-  5.3 add conroller to api with name NotificationsController
+  5.3 add conroller to api 
   
-  sample
+  Code
   ```C#
     [Route("api/[controller]")]
     [ApiController]
