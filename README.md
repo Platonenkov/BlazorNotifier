@@ -90,7 +90,7 @@ to set progress bar as intermediate - set percent as null;
 
 ## How Use
 
-### 1 Create Api project .NET Core 3.1
+### 1 Create Api project .NET Core 3.1 or .Net 5
 ### 2 Install package Microsoft.AspNetCore.SignalR to API
 ### 3 Install package BlazoreNotifier to API
 ### 4 Api Properties - > LainchSettings -> sslPort ->change in to 44303
