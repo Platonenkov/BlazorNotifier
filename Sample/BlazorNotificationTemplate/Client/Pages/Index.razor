@@ -37,18 +37,16 @@
         NotifiService.OnChange += StateHasChanged;
     }
 
-    int counter = 1;
     async Task ShowNotification()
     {
         var random = new Random();
         var type = random.Next(2, 6);
-        NotifiService.SendNotification(new BlazorNotifierMessage { Title = $"{(BlazorNotifierType)type}", Type = (BlazorNotifierType)type });
+        await NotifiService.SendNotification(new BlazorNotifierMessage { Title = $"{(BlazorNotifierType)type}", Type = (BlazorNotifierType)type });
 
         await InvokeAsync(StateHasChanged);
     }
 
     BlazorNotifierProgressMessage ServerProgress;
-    BlazorNotifierProgressMessage ClientProgress;
     private int? _Percent;
     public int? Percent { get => _Percent ; private set => _Percent = value; }
 
@@ -56,7 +54,7 @@
     {
         ServerProgress = new BlazorNotifierProgressMessage {Message = "Test message", Title = "Progress", Percent = Percent };
          
-        NotifiService.SendOrUpdateProgress(ServerProgress);
+        await NotifiService.SendOrUpdateProgress(ServerProgress);
 
         await InvokeAsync(StateHasChanged);
     }
@@ -66,7 +64,7 @@
         Percent ??= 0;
         var value = Percent++;
         progress.Percent = value;
-        NotifiService.SendOrUpdateProgress(progress);
+        await NotifiService.SendOrUpdateProgress(progress);
         await InvokeAsync(StateHasChanged);
     }
     async Task UpdateMinus(BlazorNotifierProgressMessage progress)
@@ -75,7 +73,7 @@
         if(Percent < 0) Percent = 0;
         var value = Percent--;
         progress.Percent = value;
-        NotifiService.SendOrUpdateProgress(progress);
+        await NotifiService.SendOrUpdateProgress(progress);
         await InvokeAsync(StateHasChanged);
     }
     async Task UpdateNull(BlazorNotifierProgressMessage progress)
@@ -83,7 +81,7 @@
         Percent = null;
         var value = Percent;
         progress.Percent = value;
-        NotifiService.SendOrUpdateProgress(progress);
+        await NotifiService.SendOrUpdateProgress(progress);
         await InvokeAsync(StateHasChanged);
     }
 
