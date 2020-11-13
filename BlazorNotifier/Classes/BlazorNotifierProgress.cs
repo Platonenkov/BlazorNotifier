@@ -46,7 +46,7 @@ namespace BlazorNotifier.Classes
                     await server.UpdateProgress(new BlazorNotifierProgressMessage(ProgressID, value.Title, value.Message, value.percent, UserId));
                     break;
                 case BlazorNotifierClientService client: 
-                    client.SendOrUpdateProgress(new BlazorNotifierProgressMessage(ProgressID, value.Title, value.Message, value.percent, client.UserId));
+                    await client.SendOrUpdateProgress(new BlazorNotifierProgressMessage(ProgressID, value.Title, value.Message, value.percent, client.UserId));
                     break;
             }
 

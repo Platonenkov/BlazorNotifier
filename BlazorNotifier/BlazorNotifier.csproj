@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <RazorLangVersion>3.0</RazorLangVersion>
     <LangVersion>latest</LangVersion>
     <Description>This package will help you send notification massage from server to client</Description>
     <Authors>APlatonenkov</Authors>
