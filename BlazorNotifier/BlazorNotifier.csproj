@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <RazorLangVersion>3.0</RazorLangVersion>
     <LangVersion>latest</LangVersion>
     <Description>This package will help you send notification massage from server to client</Description>
@@ -11,24 +11,25 @@
     <PackageProjectUrl>https://github.com/Platonenkov/BlazorNotifier</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Platonenkov/BlazorNotifier</RepositoryUrl>
     <PackageTags>Blazor, Notification, Message, Toast, Progress, progress-bar</PackageTags>
-    <PackageReleaseNotes>add standard progress&lt;T&gt; with service</PackageReleaseNotes>
+    <PackageReleaseNotes>net5 release</PackageReleaseNotes>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <AssemblyVersion>2.0.2.1</AssemblyVersion>
-    <FileVersion>2.0.2.1</FileVersion>
-    <Version>2.0.2.1</Version>
+    <AssemblyVersion>5.0.0.0</AssemblyVersion>
+    <FileVersion>5.0.0.0</FileVersion>
+    <Version>5.0.0</Version>
     <PackageLicenseExpression></PackageLicenseExpression>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
 
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Components" Version="3.1.8" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="3.1.8" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
-    <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="3.1.8" />
-    <PackageReference Include="System.Net.Http.Json" Version="3.2.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Components" Version="5.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="5.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Connections.Client" Version="5.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Connections.Common" Version="5.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="5.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Common" Version="5.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Core" Version="1.1.0" />
+    <PackageReference Include="System.Net.Http.Json" Version="5.0.0" />
   </ItemGroup>
 
 
