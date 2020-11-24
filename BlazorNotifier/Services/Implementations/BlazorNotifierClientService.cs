@@ -14,6 +14,8 @@ namespace BlazorNotifier.Services.Implementations
 {
     public class BlazorNotifierClientService
     {
+        private readonly string _ServerAddress;
+
         #region События
 
         /// <summary> Событие при изменениях в сервисе </summary>
@@ -29,15 +31,18 @@ namespace BlazorNotifier.Services.Implementations
         #endregion
 
         /// <summary> Конструктор с инициализатором сервиса </summary>
-        public BlazorNotifierClientService()
+        public BlazorNotifierClientService(NotifierServiceOptions options)
         {
-            ConnectToServerAsync();
+            _ServerAddress = options.ServiceAddress+$"/{options.HubName}";
+            if(string.IsNullOrWhiteSpace(options.ServiceAddress))
+                SetNotifications();
+            else
+                ConnectToServerAsync();
         }
         #region Notification
         /// <summary> Словарь событий время/сообщение </summary>
         public Dictionary<DateTime, BlazorNotifierMessage> Events { get; }= new Dictionary<DateTime, BlazorNotifierMessage>();
         /// <summary> адрес сервиса api </summary>
-        string Url = "https://localhost:44303/notificationhub";
         /// <summary> Коллекция уведомительных сообщений </summary>
         public Notifications Notification { get; }= new Notifications();
 
@@ -89,15 +94,21 @@ namespace BlazorNotifier.Services.Implementations
 
         #endregion
 
-        /// <summary> Подключение к серверу </summary>
-        private async void ConnectToServerAsync()
+        private void SetNotifications()
         {
             //Добавляя новое сообщение в коллекцию - записываем сообщение в события
             Notification.OnChange += NotifyChanged;
-            Notification.OnAddNewMessage += async m=>await StartNotifierTimer(m);
+            Notification.OnAddNewMessage += async m => await StartNotifierTimer(m);
+
+        }
+
+        /// <summary> Подключение к серверу </summary>
+        private async void ConnectToServerAsync()
+        {
+            SetNotifications();
 
             _Connection = new HubConnectionBuilder()
-                .WithUrl(Url)
+                .WithUrl(_ServerAddress)
                 .Build();
 
             await _Connection.StartAsync();

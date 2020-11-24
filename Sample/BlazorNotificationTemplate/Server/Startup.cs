@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Linq;
+using BlazorNotifier.Services;
 using BlazorNotifier.Services.Implementations;
 
 namespace BlazorNotificationTemplate.Server
@@ -26,7 +27,13 @@ namespace BlazorNotificationTemplate.Server
 
             services.AddControllersWithViews();
             services.AddRazorPages();
-            services.AddSingleton<BlazorNotifierServerService>();
+            services.AddNotifierService(
+                o =>
+                {
+                    o.ServiceAddress = "https://localhost:44303";
+                    o.HubName = "notificationhub";
+                    o.ControllerApiPath = "api/notifications";
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

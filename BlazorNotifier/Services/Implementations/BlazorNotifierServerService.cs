@@ -10,23 +10,25 @@ namespace BlazorNotifier.Services.Implementations
     public class BlazorNotifierServerService
     {
         private readonly ILogger<BlazorNotifierServerService> _Logger;
+        private readonly string _ServerAddress;
 
-        public BlazorNotifierServerService(ILogger<BlazorNotifierServerService> Logger)
+        public BlazorNotifierServerService(ILogger<BlazorNotifierServerService> Logger, NotifierServiceOptions options)
         {
             _Logger = Logger;
+            _ServerAddress = options.ServiceAddress + $"/{options.ControllerApiPath}";
         }
 
         #region Implementation of IBlazorNotifierServerService
-        /// <summary>
-        /// Отправить на клиент сообщение
-        /// </summary>
-        /// <param name="message">сообщение</param>
-        /// <returns></returns>
-        public async Task<bool> SendNotificationAsync(BlazorNotifierMessage message)
+            /// <summary>
+            /// Отправить на клиент сообщение
+            /// </summary>
+            /// <param name="message">сообщение</param>
+            /// <returns></returns>
+            public async Task<bool> SendNotificationAsync(BlazorNotifierMessage message)
         {
             try
             {
-                using var response = await new HttpClient().PostAsJsonAsync("https://localhost:44303/api/notifications/SendMessage", message);
+                using var response = await new HttpClient().PostAsJsonAsync($"{_ServerAddress}/SendMessage", message);
                 return response.IsSuccessStatusCode;
             }
             catch (Exception e)
@@ -48,7 +50,7 @@ namespace BlazorNotifier.Services.Implementations
             var message = new BlazorNotifierMessage{Title = text, ToUserId = UserId, Type = type};
             try
             {
-                using var response = await new HttpClient().PostAsJsonAsync("https://localhost:44303/api/notifications/SendMessage", message);
+                using var response = await new HttpClient().PostAsJsonAsync($"{_ServerAddress}/SendMessage", message);
                 return response.IsSuccessStatusCode;
             }
             catch (Exception e)
@@ -67,7 +69,7 @@ namespace BlazorNotifier.Services.Implementations
         {
             try
             {
-                using var response = await new HttpClient().PostAsJsonAsync("https://localhost:44303/api/notifications/Log", message);
+                using var response = await new HttpClient().PostAsJsonAsync($"{_ServerAddress}/Log", message);
                 return response.IsSuccessStatusCode;
             }
             catch (Exception e)
@@ -93,7 +95,7 @@ namespace BlazorNotifier.Services.Implementations
         {
             try
             {
-                using var response = await new HttpClient().PostAsJsonAsync("https://localhost:44303/api/notifications/SendTitle", Title);
+                using var response = await new HttpClient().PostAsJsonAsync($"{_ServerAddress}/SendTitle", Title);
                 return response.IsSuccessStatusCode;
             }
             catch (Exception e)
@@ -114,7 +116,7 @@ namespace BlazorNotifier.Services.Implementations
             var message = new BlazorNotifierMessage{Title = Title, Type = type, IsPrivate = false};
             try
             {
-                using var response = await new HttpClient().PostAsJsonAsync("https://localhost:44303/api/notifications/SendMessage", message);
+                using var response = await new HttpClient().PostAsJsonAsync($"{_ServerAddress}/SendMessage", message);
                 return response.IsSuccessStatusCode;
             }
             catch (Exception e)
@@ -132,7 +134,7 @@ namespace BlazorNotifier.Services.Implementations
         {
             try
             {
-                using var response = await new HttpClient().PostAsJsonAsync("https://localhost:44303/api/notifications/progress/finish", Message);
+                using var response = await new HttpClient().PostAsJsonAsync($"{_ServerAddress}/progress/finish", Message);
                 return response.IsSuccessStatusCode;
             }
             catch (Exception e)
@@ -152,7 +154,7 @@ namespace BlazorNotifier.Services.Implementations
         {
             try
             {
-                using var response = await new HttpClient().PostAsJsonAsync("https://localhost:44303/api/notifications/progress/update", Message);
+                using var response = await new HttpClient().PostAsJsonAsync($"{_ServerAddress}/progress/update", Message);
                 return response.IsSuccessStatusCode;
             }
             catch (Exception e)
@@ -171,7 +173,7 @@ namespace BlazorNotifier.Services.Implementations
         {
             try
             {
-                using var response = await new HttpClient().PostAsJsonAsync("https://localhost:44303/api/notifications/progress/Add", Message);
+                using var response = await new HttpClient().PostAsJsonAsync($"{_ServerAddress}/progress/Add", Message);
                 return response.IsSuccessStatusCode;
             }
             catch (Exception e)
