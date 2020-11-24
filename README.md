@@ -1,10 +1,21 @@
 # BlazorNotifier
 Blazor notifier from server to client by SignalR
 
-## Install-Package BlazorNotifier -Version 5.0.0.0
+## Install-Package BlazorNotifier -Version 5.0.1
 Net5 support
 
 ![Demo](https://github.com/Platonenkov/BlazorNotifier/blob/main/Resources/Notifier.gif)
+
+### quick start work for client only without server notification
+```C#
+      services.AddNotifierService(
+                o =>
+                {
+                    o.ServiceAddress = "no";
+                    o.HubName = "no";
+                    o.ControllerApiPath = "no";
+                });
+```
 
 ## Methods
 ### OnClient
@@ -93,7 +104,7 @@ to set progress bar as intermediate - set percent as null;
 ### 1 Create Api project .NET Core 3.1 or .Net 5
 ### 2 Install package Microsoft.AspNetCore.SignalR to API
 ### 3 Install package BlazoreNotifier to API
-### 4 Api Properties - > LainchSettings -> sslPort ->change in to 44303
+### 4 Api Properties - > LaunchSettings -> sslPort ->change in to 44303 or set other
 ### 5 Edit Api Startup.cs
   5.1 add service
   ```C#
@@ -112,7 +123,7 @@ to set progress bar as intermediate - set percent as null;
   app.UseCors("CorsPolicy");
   app.UseEndpoints(endpoints =>
   {
-    endpoints.MapHub<NotificationHub>("/notificationhub");
+    endpoints.MapHub<NotificationHub>("/notificationhub"); //sample name
     endpoints.MapControllers();
   });
   ```
@@ -258,7 +269,13 @@ to set progress bar as intermediate - set percent as null;
 ### 7 Edit Client Programm.cs
  add service
  ```C#
-             builder.Services.AddScoped<BlazorNotifierClientService>();
+             builder.Services.AddNotifierService(
+                o =>
+                {
+                    o.ServiceAddress = "https://localhost:44303";
+                    o.HubName = "notificationhub";
+                    o.ControllerApiPath = "api/notifications";
+                });
  ```
 ### 8 Edit MainLayout and Index.html on client
 add Notifier section in MainLayout
@@ -310,7 +327,13 @@ Notifi.events to show Time -> key, and message
 
 ### 11 Add Service to Server
 ```C#
-      services.AddSingleton<BlazorNotifierServerService>();
+      services.AddNotifierService(
+                o =>
+                {
+                    o.ServiceAddress = "https://localhost:44303";
+                    o.HubName = "notificationhub";
+                    o.ControllerApiPath = "api/notifications";
+                });
 ```
 
 ### Send message
