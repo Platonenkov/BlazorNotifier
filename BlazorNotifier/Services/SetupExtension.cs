@@ -35,7 +35,7 @@ namespace BlazorNotifier.Services
         {
             if (setOptions == null)
                 throw new ArgumentNullException(nameof(setOptions));
-            services.AddSingleton<NotifierServiceOptions>((Func<IServiceProvider, NotifierServiceOptions>)(si =>
+            services.AddSingleton<INotifierServiceOptions, NotifierServiceOptions>((Func<IServiceProvider, NotifierServiceOptions>)(si =>
             {
                 NotifierServiceOptions serviceOptions = new NotifierServiceOptions();
                 setOptions((INotifierServiceOptions)serviceOptions);
@@ -86,14 +86,4 @@ namespace BlazorNotifier.Services
         string ControllerApiPath { get; set; }
     }
 
-    public class NotifierServiceOptions : INotifierServiceOptions
-    {
-        #region Implementation of INotifierServiceOptions
-        public string ServiceAddress { get; set; }
-        public string HubName { get; set ; }
-
-        public string ControllerApiPath { get ; set ; }
-
-        #endregion
-    }
 }

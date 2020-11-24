@@ -31,7 +31,7 @@ namespace BlazorNotifier.Services.Implementations
         #endregion
 
         /// <summary> Конструктор с инициализатором сервиса </summary>
-        public BlazorNotifierClientService(NotifierServiceOptions options)
+        public BlazorNotifierClientService(INotifierServiceOptions options)
         {
             _ServerAddress = options.ServiceAddress+$"/{options.HubName}";
             if(string.IsNullOrWhiteSpace(options.ServiceAddress))

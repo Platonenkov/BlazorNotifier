@@ -12,7 +12,7 @@ namespace BlazorNotifier.Services.Implementations
         private readonly ILogger<BlazorNotifierServerService> _Logger;
         private readonly string _ServerAddress;
 
-        public BlazorNotifierServerService(ILogger<BlazorNotifierServerService> Logger, NotifierServiceOptions options)
+        public BlazorNotifierServerService(ILogger<BlazorNotifierServerService> Logger, INotifierServiceOptions options)
         {
             _Logger = Logger;
             _ServerAddress = options.ServiceAddress + $"/{options.ControllerApiPath}";
