@@ -10,13 +10,15 @@
     <PackageProjectUrl>https://github.com/Platonenkov/BlazorNotifier</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Platonenkov/BlazorNotifier</RepositoryUrl>
     <PackageTags>Blazor, Notification, Message, Toast, Progress, progress-bar</PackageTags>
-    <PackageReleaseNotes>net5 release</PackageReleaseNotes>
+    <PackageReleaseNotes>DI options and service register, add local service without server. 
+Use Service.AddNotifierService(options);</PackageReleaseNotes>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <AssemblyVersion>5.0.0.0</AssemblyVersion>
-    <FileVersion>5.0.0.0</FileVersion>
-    <Version>5.0.0</Version>
+    <AssemblyVersion>5.0.1.0</AssemblyVersion>
+    <FileVersion>5.0.1.0</FileVersion>
+    <Version>5.0.1</Version>
     <PackageLicenseExpression></PackageLicenseExpression>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageIcon>icon.png</PackageIcon>
   </PropertyGroup>
 
 
@@ -34,6 +36,10 @@
 
   <ItemGroup>
     <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+    <None Include="..\Resources\icon.png">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
